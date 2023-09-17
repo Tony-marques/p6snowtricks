@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!
+{% endblock %}
+
+{% block body %}
+
+	{% if error %}
+		{{error.messageKey}}
+	{% endif %}
+
+	<div class="login-container">
+
+		<h1>Connexion</h1>
+
+		<form action="{{path("app.login")}}" method="post">
+
+			<input type="email" name="_username" value="{{username}}" id="">
+			<input type="password" name="_password" id="">
+			<label for="">
+				<input type="checkbox" name="_remember_me" id="">Se souvenir de moi</label>
+			<input type="hidden" name="_csrf_token" value="{{csrf_token("authenticate")}}">
+			<input type="hidden" name="app.home" value="/home"/>
+			<button type="submit">Connexion</button>
+		</form>
+	</div>
+{% endblock %}
