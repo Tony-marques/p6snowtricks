@@ -1,0 +1,17 @@
+.footer-container {
+   background: var(--color-primary);
+   width: 100%;
+
+   .footer {
+      // width: 1200px;
+      width: max-content;
+      // border: 1px solid red;
+      margin: 0 auto;
+      padding: 2rem 0;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+   }
+}

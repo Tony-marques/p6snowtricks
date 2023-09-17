@@ -1,0 +1,74 @@
+.home {
+   &-picture {
+      background: url("/public/assets/images/home_picture.webp");
+      height: calc(100vh - 83px);
+      background-position: top;
+      background-repeat: no-repeat;
+      width: 100%;
+      background-size: cover;
+      position: relative;
+
+      .arrow {
+         position: absolute;
+         bottom: 30px;
+         right: 30px;
+         //  font-size: 3rem;
+         color: var(--color-primary);
+      }
+   }
+   &-slogan {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 10vw;
+      color: var(--color-primary);
+      font-size: var(--title-font-size);
+      font-weight: 500;
+   }
+   #tricks {
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+
+      .trick {
+         border: 1px solid var(--border-color);
+         width: clamp(200px, 19%, 500px);
+         border-radius: var(--border-radius);
+         overflow: hidden;
+
+         img {
+            width: 100%;
+            object-fit: cover;
+         }
+         &-information {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+         }
+         &-name {
+            color: var(--color-primary);
+
+            font-size: 1.5rem;
+         }
+
+         .btn-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            i {
+               font-size: 1.5rem;
+              //  color: var(--color-primary);
+            }
+            .fa-pencil{
+              color: var(--edit-button);
+            }
+            .fa-trash-can{
+              color: var(--delete-button);
+            }
+         }
+      }
+   }
+}
