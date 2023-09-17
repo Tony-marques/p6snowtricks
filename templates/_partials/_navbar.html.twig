@@ -1,0 +1,33 @@
+<header class="navbar-container">
+	<navbar class="navbar">
+		<a class="" href="{{ path("app.home") }}">
+			<img src="{{asset("/assets/images/logo.png")}}" alt="" class="logo"></a>
+		<ul class="">
+			<li>
+				<a href="{{ path("app.home") }}" class="{{app.request.attributes.get('_route') == "app.home" ? "active" : ""}}">Accueil</a>
+			</li>
+			<li>
+				<a href="{{ path("app.home", {"_fragment": "tricks"}) }}">Tricks</a>
+			</li>
+			<pre>
+</pre>
+			{% if not app.user %}
+				<li>
+					<a href="{{ path("app.login") }}" class="{{ app.request.get('_route') == 'app.login' ? 'active' :""}}">Connexion</a>
+				</li>
+				<li>
+					<a href="{{ path("app.register") }}" class="{{ app.request.get('_route') == 'app.register' ? 'active' :""}}">Inscription</a>
+				</li>
+			{% else %}
+				<li>
+					<a href="{{ path("app.logout") }}">Déconnexion</a>
+				</li>
+			{% endif %}
+
+			<li>
+				<a href="{{path("app.dashboard")}}">Dashboard</a>
+			</li>
+
+		</ul>
+	</navbar>
+</header>
