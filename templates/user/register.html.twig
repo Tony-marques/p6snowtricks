@@ -1,0 +1,33 @@
+{% extends "base.html.twig" %}
+{% form_theme form 'tailwind_2_layout.html.twig' %}
+{% block body %}
+	<div class="register-container">
+		<div class="relative flex flex-col justify-center h-screen overflow-hidden">
+			{{ form_start(form, {form_class: "testtttt"})}}
+
+			<h1 class="text-3xl font-semibold text-center text-gray-700">Inscription</h1>
+			<div class="form-control">
+				{{form_label(form.email)}}
+				{{form_widget(form.email)}}
+				{{form_errors(form.email)}}
+			</div>
+			<div class="form-control">
+				{{form_label(form.pseudo)}}
+				{{form_widget(form.pseudo)}}
+				{{form_errors(form.pseudo)}}
+			</div>
+			<div class="form-control">
+				{{form_label(form.password)}}
+				{{form_widget(form.password, {widget_class: 'bg-gray-500'})}}
+				{{form_errors(form.password)}}
+			</div>
+			<div>
+				<button class="btn my-5">M'inscrire</button>
+			</div>
+			<span>Vous avez déjà un compte ?
+				<a href="#">Connexion</a>
+			</span>
+			{{form_end(form)}}
+		</div>
+	</div>
+{% endblock %}
