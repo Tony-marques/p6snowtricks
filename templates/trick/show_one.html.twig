@@ -1,6 +1,9 @@
 {% extends "base.html.twig" %}
 
-{% block body %}
+{% block title %}
+    Trick {{ trick.id }}
+{% endblock %}
 
-{{ trick.name }}
+{% block body %}
+    {{ trick.name }}
 {% endblock %}

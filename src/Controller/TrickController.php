@@ -29,7 +29,7 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-            return $this->redirectToRoute("app.dashboard");
+            return $this->redirectToRoute("app.tricks_manage");
         }
 
         return $this->render('trick/create.html.twig', [
@@ -72,12 +72,13 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-//            return $this->redirectToRoute("app.tricks_show_one", ["id" => $trick->getId()]);
+            return $this->redirectToRoute("app.tricks_show_one", ["id" => $trick->getId()]);
         }
 
 
         return $this->render("trick/edit.html.twig", [
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "trick" => $trick
         ]);
     }
 
@@ -100,9 +101,8 @@ class TrickController extends AbstractController
     #[Route(path: "/manage", name: "_manage")]
     public function manage(EntityManagerInterface $em): Response
     {
-//dd($em->getRepository(Trick::class)->findAll());
         return $this->render("trick/manage.html.twig", [
-            "tricks" => $em->getRepository(Trick::class)->findAll()
+            "tricks" => $em->getRepository(Trick::class)->findBy([], ["createdAt" => "DESC"])
         ]);
     }
 
