@@ -1,0 +1,58 @@
+{% extends "admin.html.twig" %}
+
+{% block body %}
+
+    <div class="relative overflow-x-auto flex items-center justify-center flex-1 flex-col mt-10 mb-20">
+        <h1 class="mb-10 text-xl">Gérer les tricks</h1>
+        <table class="text-sm text-left text-gray-500 dark:text-gray-400 w-9/12 rounded-lg">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 w-6/12">
+                    Nom
+                </th>
+                <th scope="col" class="px-6 py-3 w-3/12">
+                    Auteur
+                </th>
+                <th scope="col" class="px-6 py-3 w-3/12">
+                    Création
+                </th>
+                <th scope="col" class="px-6 py-3 w-3/12">
+                    Modification
+                </th>
+
+                <th scope="col" class="px-6 py-3 w-3/12">
+                    <span class="">Action</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for trick in tricks %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ trick.name }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ trick.user.pseudo }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ trick.createdAt|date("d/m/Y") }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ trick.updatedAt|date("d/m/Y") }}
+                    </td>
+
+                    <td class="px-6 py-4 text-right flex gap-4">
+                        <a href="{{ path("app.tricks_edit", {id: trick.id}) }}"
+                           class="btn btn-sm btn-success hover:bg-green-500">Editer</a>
+                        <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" class="btn btn-sm btn-error hover:bg-red-500">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

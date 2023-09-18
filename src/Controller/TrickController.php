@@ -45,7 +45,6 @@ class TrickController extends AbstractController
         ],
         methods: ["POST"]
     )]
-
     public function delete(Request $request, EntityManagerInterface $em, Trick $trick)
     {
         $em->remove($trick);
@@ -62,13 +61,13 @@ class TrickController extends AbstractController
         ],
         methods: ["POST"]
     )]
-    public function edit(Request $request, EntityManagerInterface $em, Trick $trick):Response
+    public function edit(Request $request, EntityManagerInterface $em, Trick $trick): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $trick->setUpdatedAt(new DateTimeImmutable());
             $em->persist($trick);
             $em->flush();
@@ -95,6 +94,15 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show_one.html.twig', [
             "trick" => $trick
+        ]);
+    }
+
+    #[Route(path: "/manage", name: "_manage")]
+    public function manage(EntityManagerInterface $em): Response
+    {
+//dd($em->getRepository(Trick::class)->findAll());
+        return $this->render("trick/manage.html.twig", [
+            "tricks" => $em->getRepository(Trick::class)->findAll()
         ]);
     }
 
