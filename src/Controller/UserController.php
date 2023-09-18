@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -59,7 +60,16 @@ class UserController extends AbstractController
     }
 
     #[Route(path: "/deconnexion", name: "app.logout")]
-    public function logout():void
+    public function logout(): void
     {
+    }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: "/utilisateurs", name: "app.users")]
+    public function allUsers(EntityManagerInterface $em): Response
+    {
+        return $this->render("user/manage.html.twig", [
+            "users" => $em->getRepository(User::class)->findBy([], ["createdAt" => "ASC"])
+        ]);
     }
 }
