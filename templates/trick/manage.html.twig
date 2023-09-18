@@ -8,10 +8,10 @@
 
     <div class="relative overflow-x-auto flex items-center justify-center flex-1 flex-col mt-10 mb-20">
         <h1 class="mb-10 text-xl">Gérer les tricks</h1>
-        <table class="text-sm text-left text-gray-500 dark:text-gray-400 w-9/12 rounded-lg">
+        <table class="text-sm text-left text-gray-500 dark:text-gray-400 w-9/12 bg-white rounded-xl">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3 w-6/12 first:rounded">
+                <th scope="col" class="px-6 py-3 w-6/12 rounded-tl-lg">
                     Nom
                 </th>
                 <th scope="col" class="px-6 py-3 w-3/12">
@@ -24,15 +24,16 @@
                     Modification
                 </th>
 
-                <th scope="col" class="px-6 py-3 w-3/12">
+                <th scope="col" class="px-6 py-3 w-3/12 rounded-tr-lg">
                     <span class="">Action</span>
                 </th>
             </tr>
             </thead>
             <tbody class="">
             {% for trick in tricks %}
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 last:rounded-bl-lg last:rounded-br-lg">
+                    <th scope="row"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white last:rounded-bl-lg">
                         {{ trick.name }}
                     </th>
                     <td class="px-6 py-4">
@@ -53,7 +54,9 @@
                     </td>
                 </tr>
             {% endfor %}
-
+            <tr>
+                <th class="h-3"></th>
+            </tr>
 
             </tbody>
         </table>
