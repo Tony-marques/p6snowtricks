@@ -20,9 +20,7 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="7d9047d1-a63d-4dbc-998e-9337ff1b5444" object-ref="schemas/p6_snowtricks/tables/trick" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="7d9047d1-a63d-4dbc-998e-9337ff1b5444" dataset="p6_snowtricks.user" active-filter-id="EMPTY_FILTER" />
