@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: "/tricks", name: "app.tricks", methods: ["GET", "POST"])]
 class TrickController extends AbstractController
 {
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/creer', name: '_create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -53,6 +55,7 @@ class TrickController extends AbstractController
         return $this->redirectToRoute("app.home");
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/editer/{id}',
         name: '_edit',
@@ -98,6 +101,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(path: "/manage", name: "_manage")]
     public function manage(EntityManagerInterface $em): Response
     {

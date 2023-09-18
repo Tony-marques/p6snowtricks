@@ -65,9 +65,12 @@
                     <a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
                 </li>
             {% endif %}
-            <li>
-                <a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
-            </li>
+            {% if is_granted("ROLE_ADMIN") %}
+                <li>
+                    <a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
+                </li>
+            {% endif %}
+
 
         </ul>
 
