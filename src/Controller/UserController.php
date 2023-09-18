@@ -30,6 +30,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setCreatedAt(new DateTimeImmutable());
             $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
+            $user->setRoles(["ROLE_USER"]);
             $em->persist($user);
             $em->flush();
 
