@@ -38,14 +38,20 @@
                 {#                </div> #}
 
                 {#                <div class="trick border-2 border-red-500"> #}
+                {% set maxLength = 20 %}
+                {% if trick.name|length >= maxLength %}
+                    {% set trickname = trick.name|slice(0, maxLength) ~'...' %}
+                {% else %}
+                    {% set trickname = trick.name %}
+                {% endif %}
                 <div class="card w-80 bg-base-100 shadow-xl rounded-lg">
-                    <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/></figure>
+                    <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/>
+                    </figure>
                     <div class="card-body p-4">
-                        <h2 class="card-title">Shoes!</h2>
-                        <p>If a dog chews shoes whose shoes does he choose?</p>
-                        <div class="card-actions justify-end">
-                            <a href="#" class="btn btn-error text-xs">Supprimer</a>
-                            <a href="#" class="btn btn-success text-xs">Modifier</a>
+                        <h2 class="card-title">{{ trickname }}</h2>
+                        <div class="card-actions justify-end mt-1">
+                            <a href="#" class="btn btn-success text-xs hover:bg-green-500">Modifier</a>
+                            <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" class="btn btn-error text-xs hover:bg-red-500">Supprimer</a>
                         </div>
                     </div>
                 </div>
