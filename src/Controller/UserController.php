@@ -58,7 +58,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: "/deconnexion", name: "app.logout")]
-    public function logout()
+    public function logout():void
     {
     }
 }
