@@ -4,13 +4,54 @@
 {% endblock %}
 
 {% block body %}
-	<div class="home">
-		<div class="home-picture">
-			<div class="home-slogan">Bienvenue sur SnowTricks</div>
-			<a href="#tricks" class="arrow">
-				<i class="fa-solid fa-circle-arrow-down fa-3x "></i>
-			</a>
-		</div>
+    <div class="home">
+        <div class="home-picture">
+            <div class="home-slogan">Bienvenue sur SnowTricks</div>
+            <a href="#tricks" class="arrow">
+                <i class="fa-solid fa-circle-arrow-down fa-3x "></i>
+            </a>
+        </div>
+        <div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10 ">
 
-	</div>
+            {% for trick in tricks %}
+
+                {#                <div href="#" class="trick"> #}
+                {#                    <img src="{{asset("assets/images/testsnowtricks.jpg")}}" alt=""> #}
+                {#                    <div class="trick-information"> #}
+                {#                        {% set maxLength = 10 %} #}
+                {#                        {% if trick.name|length >= maxLength %} #}
+                {#                            {% set trickname = trick.name|slice(0, maxLength) ~'...' %} #}
+                {#                        {% else %} #}
+                {#                            {% set trickname = trick.name %} #}
+                {#                        {% endif %} #}
+
+                {#                        <a href="{{path("app.tricks_show_one", {id: trick.id})}}" class="trick-name">{{trickname}}</a> #}
+                {#                        <div class="btn-container"> #}
+                {#                            <a href="{{path("app.tricks_edit", {id: trick.id})}}"> #}
+                {#                                <i class="fa-solid fa-pencil"></i> #}
+                {#                            </a> #}
+                {#                            <a href="{{path("app.tricks_delete", {id: trick.id})}}"> #}
+                {#                                <i class="fa-solid fa-trash-can"></i> #}
+                {#                            </a> #}
+                {#                        </div> #}
+                {#                    </div> #}
+                {#                </div> #}
+
+                {#                <div class="trick border-2 border-red-500"> #}
+                <div class="card w-80 bg-base-100 shadow-xl rounded-lg">
+                    <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/></figure>
+                    <div class="card-body p-4">
+                        <h2 class="card-title">Shoes!</h2>
+                        <p>If a dog chews shoes whose shoes does he choose?</p>
+                        <div class="card-actions justify-end">
+                            <a href="#" class="btn btn-error text-xs">Supprimer</a>
+                            <a href="#" class="btn btn-success text-xs">Modifier</a>
+                        </div>
+                    </div>
+                </div>
+                {#                    </div> #}
+            {% endfor %}
+
+        </div>
+    </div>
 {% endblock %}
