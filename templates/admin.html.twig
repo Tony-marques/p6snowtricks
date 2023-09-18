@@ -6,10 +6,11 @@
         {% block title %}Welcome!
         {% endblock %}
     </title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     {% block stylesheets %}
-         {{ encore_entry_link_tags('app') }}
-{#        <link rel="stylesheet" href="{{ asset("build/app.css") }}">#}
+        {{ encore_entry_link_tags('app') }}
+        {#        <link rel="stylesheet" href="{{ asset("build/app.css") }}"> #}
     {% endblock %}
     {% block javascripts %}
         <script src="https://kit.fontawesome.com/6274398224.js" crossorigin="anonymous"></script>
@@ -17,9 +18,9 @@
 
     {% endblock %}
 </head>
-<body class="admin">
+<body class="admin flex gap-2">
 {% include "_partials/_navbar_dashboard.html.twig" %}
-<div class="main"> {% block body %}{% endblock %}
+<div class="main flex-1 flex items-center"> {% block body %}{% endblock %}
 </div>
 {# {% include "_partials/_footer.html.twig" %} #}
 </body>
