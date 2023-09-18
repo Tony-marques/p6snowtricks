@@ -82,4 +82,20 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[Route(
+        '/{id}',
+        name: '_show_one',
+        requirements: [
+            "id" => "\d+"
+        ],
+        methods: ["GET"]
+    )]
+    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick): Response
+    {
+
+        return $this->render('trick/show_one.html.twig', [
+            "trick" => $trick
+        ]);
+    }
+
 }

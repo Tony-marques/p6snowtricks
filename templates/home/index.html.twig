@@ -48,7 +48,7 @@
                     <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/>
                     </figure>
                     <div class="card-body p-4">
-                        <h2 class="card-title">{{ trickname }}</h2>
+                        <a href="{{path("app.tricks_show_one", {id: trick.id})}}" class="card-title">{{trickname}}</a>
                         <div class="card-actions justify-end mt-1">
                             <a href="{{ path("app.tricks_edit", {id: trick.id}) }}" class="btn btn-success text-xs hover:bg-green-500">Modifier</a>
                             <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" class="btn btn-error text-xs hover:bg-red-500">Supprimer</a>
