@@ -6,7 +6,19 @@
 
 {% block body %}
     <div class="trick-container flex flex-col items-center">
-        <div class="trick w-7/12 flex flex-col items-center my-10 border border-gray-500 rounded-lg">
+        <div class="trick w-7/12 flex flex-col items-center my-10 border border-gray-500 rounded-lg relative">
+            {% if is_granted("ROLE_ADMIN") %}
+                <div class="card-actions justify-end mt-1 absolute top-1 right-3">
+                    <a href="{{ path("app.tricks_edit", {id: trick.id}) }}" title="Modifier le trick"
+                       class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
+                        <i class="fa-solid fa-pencil"></i>
+                    </a>
+                    <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" title="Supprimer le trick"
+                       class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+            {% endif %}
             <img src="{{ asset("assets/images/home_picture.webp") }}"
                  class="w-full h-[450px] object-cover object-center rounded-lg" alt="">
             <div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
