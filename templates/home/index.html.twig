@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block body %}
-    <div class="home">
+    <div class="home relative flex flex-col items-center mb-10">
         <div class="home-picture">
             <div class="home-slogan">Bienvenue sur SnowTricks</div>
             <a href="#tricks" class="arrow">
                 <i class="fa-solid fa-circle-arrow-down fa-3x "></i>
             </a>
         </div>
-        <div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10 ">
+        <div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10">
 
             {% for trick in tricks %}
 
@@ -39,7 +39,7 @@
                 {#                </div> #}
 
                 {#                <div class="trick border-2 border-red-500"> #}
-                {% set maxLength = 20 %}
+                {% set maxLength = 15 %}
                 {% if trick.name|length >= maxLength %}
                     {% set trickname = trick.name|slice(0, maxLength) ~'...' %}
                 {% else %}
@@ -48,24 +48,36 @@
                 <div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
                     <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/>
                     </figure>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 flex flex-row justify-between items-center">
                         <a href="{{ path("app.tricks_show_one", {id: trick.id}) }}"
                            class="card-title hover:text-white">{{ trickname }}</a>
-                        <div class="card-actions justify-end mt-1">
-                            <a href="{{ path("app.tricks_edit", {id: trick.id}) }}"
-                               class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
-                                <i class="fa-solid fa-pencil"></i>
-                                Modifier</a>
-                            <a href="{{ path("app.tricks_delete", {id: trick.id}) }}"
-                               class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
-                                <i class="fa-solid fa-trash-can"></i>
-                                Supprimer</a>
-                        </div>
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <div class="card-actions justify-end mt-1">
+                                <a href="{{ path("app.tricks_edit", {id: trick.id}) }}" title="Modifier le trick"
+                                   class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                                <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" title="Supprimer le trick"
+                                   class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 {#                    </div> #}
             {% endfor %}
 
+
+
         </div>
+        {% if tricks|length > 10 %}
+            <button class="btn">Charger plus</button>
+        {% endif %}
+        {% if tricks|length > 15 %}
+            <a href="#tricks" class="arrow absolute bottom-5 right-10">
+                <i class="fa-solid fa-circle-arrow-up fa-3x text-base-300 hover:text-blue-500"></i>
+            </a>
+        {% endif %}
     </div>
 {% endblock %}
