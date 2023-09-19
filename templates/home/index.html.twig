@@ -45,7 +45,7 @@
                 {% else %}
                     {% set trickname = trick.name %}
                 {% endif %}
-                <div class="card w-80 bg-base-100 shadow-xl rounded-lg">
+                <div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
                     <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/>
                     </figure>
                     <div class="card-body p-4">
@@ -53,9 +53,13 @@
                            class="card-title hover:text-white">{{ trickname }}</a>
                         <div class="card-actions justify-end mt-1">
                             <a href="{{ path("app.tricks_edit", {id: trick.id}) }}"
-                               class="btn btn-success text-xs hover:bg-green-500">Modifier</a>
+                               class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
+                                <i class="fa-solid fa-pencil"></i>
+                                Modifier</a>
                             <a href="{{ path("app.tricks_delete", {id: trick.id}) }}"
-                               class="btn btn-error text-xs hover:bg-red-500">Supprimer</a>
+                               class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+                                <i class="fa-solid fa-trash-can"></i>
+                                Supprimer</a>
                         </div>
                     </div>
                 </div>
