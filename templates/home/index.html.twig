@@ -49,15 +49,15 @@
                     <figure><img src="{{ asset("assets/images/testsnowtricks.jpg") }}" alt="Shoes" class="w-full"/>
                     </figure>
                     <div class="card-body p-4 flex flex-row justify-between items-center">
-                        <a href="{{ path("app.tricks_show_one", {id: trick.id}) }}"
+                        <a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}"
                            class="card-title hover:text-white">{{ trickname }}</a>
                         {% if is_granted("ROLE_ADMIN") %}
                             <div class="card-actions justify-end mt-1">
-                                <a href="{{ path("app.tricks_edit", {id: trick.id}) }}" title="Modifier le trick"
+                                <a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick"
                                    class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <a href="{{ path("app.tricks_delete", {id: trick.id}) }}" title="Supprimer le trick"
+                                <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}" title="Supprimer le trick"
                                    class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>

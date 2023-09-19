@@ -11,13 +11,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: "/tricks", name: "app.tricks", methods: ["GET", "POST"])]
 class TrickController extends AbstractController
 {
     #[IsGranted("ROLE_ADMIN")]
     #[Route('/creer', name: '_create')]
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -26,7 +27,8 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setCreatedAt(new DateTimeImmutable())
-                ->setUser($this->getUser());
+                ->setUser($this->getUser())
+                ->setSlug($slugger->slug($trick->getName())->lower());
 
             $em->persist($trick);
             $em->flush();
@@ -40,11 +42,8 @@ class TrickController extends AbstractController
     }
 
     #[Route(
-        path: '/supprimer/{id}',
+        path: '/supprimer/{slug}',
         name: '_delete',
-        requirements: [
-            "id" => "\d+"
-        ],
         methods: ["POST"]
     )]
     public function delete(Request $request, EntityManagerInterface $em, Trick $trick)
@@ -57,11 +56,8 @@ class TrickController extends AbstractController
 
     #[IsGranted("ROLE_ADMIN")]
     #[Route(
-        '/editer/{id}',
+        '/editer/{slug}',
         name: '_edit',
-        requirements: [
-            "id" => "\d+"
-        ],
         methods: ["POST"]
     )]
     public function edit(Request $request, EntityManagerInterface $em, Trick $trick): Response
@@ -75,9 +71,8 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-            return $this->redirectToRoute("app.tricks_show_one", ["id" => $trick->getId()]);
+            return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
         }
-
 
         return $this->render("trick/edit.html.twig", [
             "form" => $form->createView(),
@@ -86,11 +81,8 @@ class TrickController extends AbstractController
     }
 
     #[Route(
-        '/{id}',
+        '/{slug}',
         name: '_show_one',
-        requirements: [
-            "id" => "\d+"
-        ],
         methods: ["GET"]
     )]
     public function showOne(Request $request, EntityManagerInterface $em, Trick $trick): Response
@@ -102,7 +94,7 @@ class TrickController extends AbstractController
     }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route(path: "/manage", name: "_manage")]
+    #[Route(path: "/manage", name: "_manage", priority:1)]
     public function manage(EntityManagerInterface $em): Response
     {
         return $this->render("trick/manage.html.twig", [
