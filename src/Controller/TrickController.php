@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Form\TrickType;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,14 +45,14 @@ class TrickController extends AbstractController
     #[Route(
         path: '/supprimer/{slug}',
         name: '_delete',
-        methods: ["POST"]
+//        methods: ["POST"]
     )]
-    public function delete(Request $request, EntityManagerInterface $em, Trick $trick)
+    public function delete(Request $request, EntityManagerInterface $em, Trick $trick): JsonResponse
     {
         $em->remove($trick);
         $em->flush();
 
-        return $this->redirectToRoute("app.home");
+        return $this->json(["message" => "Le trick {$trick->getName()} a été supprimé avec succès !"]);
     }
 
     #[IsGranted("ROLE_ADMIN")]
@@ -94,7 +95,7 @@ class TrickController extends AbstractController
     }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route(path: "/manage", name: "_manage", priority:1)]
+    #[Route(path: "/manage", name: "_manage", priority: 1)]
     public function manage(EntityManagerInterface $em): Response
     {
         return $this->render("trick/manage.html.twig", [
