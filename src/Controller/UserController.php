@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ForgetPasswordType;
 use DateTimeImmutable;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,6 +71,26 @@ class UserController extends AbstractController
     {
         return $this->render("user/manage.html.twig", [
             "users" => $em->getRepository(User::class)->findBy([], ["createdAt" => "ASC"])
+        ]);
+    }
+
+    #[Route(path: "mot-de-passe-oublié", name: "app.forget_password")]
+    public function forgetPassword(Request $request): Response{
+        if ($this->getUser()){
+            return $this->redirectToRoute("app.home");
+        }
+
+        $user = new User();
+        $form = $this->createForm(ForgetPasswordType::class, $user);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+        }
+
+        return $this->render("user/forgetPassword.html.twig", [
+            "form" => $form->createView()
         ]);
     }
 }
