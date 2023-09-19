@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\TrickRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(fields: "name",message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre.")]
 class Trick
 {
     #[ORM\Id]
@@ -15,7 +17,7 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank(message: "Veuillez renseigner un titre")]
     #[Assert\Length(
         min: 5,
