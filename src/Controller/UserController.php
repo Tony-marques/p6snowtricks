@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditUserType;
 use App\Form\ForgetPasswordType;
+use App\Repository\UserRepository;
 use DateTimeImmutable;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -74,9 +76,31 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_USER")]
+    #[Route(path: "/utilisateurs/edition/{id}", name: "app.users_update")]
+    public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
+    {
+//        Créer la logique un utilisateur peut modifier uniquement son profil (les voters)
+        $form = $this->createForm(EditUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setUpdatedAt(new DateTimeImmutable());
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute("app.users");
+        }
+
+        return $this->render("user/edit.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
     #[Route(path: "mot-de-passe-oublié", name: "app.forget_password")]
-    public function forgetPassword(Request $request): Response{
-        if ($this->getUser()){
+    public function forgetPassword(Request $request): Response
+    {
+        if ($this->getUser()) {
             return $this->redirectToRoute("app.home");
         }
 
@@ -85,7 +109,7 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
         }
 

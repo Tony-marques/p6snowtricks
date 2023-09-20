@@ -5,66 +5,66 @@
 {% endblock %}
 
 {% block body %}
-{#    <div class="register-container">#}
-{#        <div class="relative flex flex-col justify-center h-screen overflow-hidden">#}
-{#            {{ form_start(form, {form_class: "testtttt"}) }}#}
-{#            <h1 class="text-red-500">Register</h1>#}
-{#            <h1 class="text-3xl font-semibold text-center text-gray-700">Inscription</h1>#}
-{#            <div class="form-control">#}
-{#                {{ form_label(form.email) }}#}
-{#                {{ form_widget(form.email) }}#}
-{#                {{ form_errors(form.email) }}#}
-{#            </div>#}
-{#            <div class="form-control">#}
-{#                {{ form_label(form.pseudo) }}#}
-{#                {{ form_widget(form.pseudo) }}#}
-{#                {{ form_errors(form.pseudo) }}#}
-{#            </div>#}
+    {#    <div class="register-container"> #}
+    {#        <div class="relative flex flex-col justify-center h-screen overflow-hidden"> #}
+    {#            {{ form_start(form, {form_class: "testtttt"}) }} #}
+    {#            <h1 class="text-red-500">Register</h1> #}
+    {#            <h1 class="text-3xl font-semibold text-center text-gray-700">Inscription</h1> #}
+    {#            <div class="form-control"> #}
+    {#                {{ form_label(form.email) }} #}
+    {#                {{ form_widget(form.email) }} #}
+    {#                {{ form_errors(form.email) }} #}
+    {#            </div> #}
+    {#            <div class="form-control"> #}
+    {#                {{ form_label(form.pseudo) }} #}
+    {#                {{ form_widget(form.pseudo) }} #}
+    {#                {{ form_errors(form.pseudo) }} #}
+    {#            </div> #}
 
-{#            <div class="form-control">#}
-{#                {{ form_label(form.password) }}#}
-{#                {{ form_widget(form.password, {attr: {class:"bg-red-700"}}) }}#}
-{#                #}{# {{form_widget(form.password)}} #}
-{#                {{ form_errors(form.password) }}#}
-{#            </div>#}
+    {#            <div class="form-control"> #}
+    {#                {{ form_label(form.password) }} #}
+    {#                {{ form_widget(form.password, {attr: {class:"bg-red-700"}}) }} #}
+    {#                #}{# {{form_widget(form.password)}} #}
+    {#                {{ form_errors(form.password) }} #}
+    {#            </div> #}
 
-{#            <div>#}
-{#                <button class="btn my-5">M'inscrire</button>#}
-{#            </div>#}
-{#            <span>Vous avez déjà un compte ?#}
-{#				<a href="{{ path("app.login") }}">Connexion</a>#}
-{#			</span>#}
-{#            {{ form_end(form) }}#}
-{#        </div>#}
+    {#            <div> #}
+    {#                <button class="btn my-5">M'inscrire</button> #}
+    {#            </div> #}
+    {#            <span>Vous avez déjà un compte ? #}
+    {#                <a href="{{ path("app.login") }}">Connexion</a> #}
+    {#            </span> #}
+    {#            {{ form_end(form) }} #}
+    {#        </div> #}
 
 
-{#    </div>#}
+    {#    </div> #}
 
 
     <div class="register-container flex items-center justify-center flex-1">
         {{ form_start(form, {attr: {class: "w-[500px]"}}) }}
-            <div class="mb-6">
-                {{ form_label(form.email, "Adresse e-mail", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-                {{ form_widget(form.email, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-                {{ form_errors(form.email) }}
-            </div>
-            <div class="mb-6">
-                {{ form_label(form.pseudo, "Pseudo", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-                {{ form_widget(form.pseudo, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-                {{ form_errors(form.pseudo) }}
-            </div>
+        <div class="mb-6">
+            {{ form_label(form.email, "Adresse e-mail", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+            {{ form_widget(form.email, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+        <div class="mb-6">
+            {{ form_label(form.pseudo, "Pseudo", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+            {{ form_widget(form.pseudo, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+            {{ form_errors(form.pseudo) }}
+        </div>
         <div class="mb-6">
             {{ form_label(form.password, "Mot de passe", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
             {{ form_widget(form.password, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
             {{ form_errors(form.password) }}
         </div>
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}">
 
-            <button type="submit"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Inscription
-            </button>
+        <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Inscription
+        </button>
         {{ form_end(form) }}
     </div>
 

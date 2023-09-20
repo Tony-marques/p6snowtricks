@@ -11,21 +11,21 @@
         <table class="text-sm text-left text-gray-500 dark:text-gray-400 w-9/12 bg-white rounded-xl">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3 w-6/12 rounded-tl-lg">
+                <th scope="col" class="px-6 py-3 rounded-tl-lg text-center">
                     Email
                 </th>
-                <th scope="col" class="px-6 py-3 w-3/12">
+                <th scope="col" class="px-6 py-3 text-center">
                     Pseudo
                 </th>
-                <th scope="col" class="px-6 py-3 w-3/12">
+                <th scope="col" class="px-6 py-3 text-center">
                     Création
                 </th>
-                <th scope="col" class="px-6 py-3 w-3/12">
+                <th scope="col" class="px-6 py-3 text-center">
                     Modification
                 </th>
 
-                <th scope="col" class="px-6 py-3 w-3/12 rounded-tr-lg">
-                    <span class="">Action</span>
+                <th scope="col" class="px-6 py-3 rounded-tr-lg text-center">
+                    Action
                 </th>
             </tr>
             </thead>
@@ -33,23 +33,27 @@
             {% for user in users %}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 last:rounded-bl-lg last:rounded-br-lg">
                     <th scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white last:rounded-bl-lg">
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white last:rounded-bl-lg text-center">
                         {{ user.email }}
                     </th>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 text-center">
                         {{ user.pseudo }}
                     </td>
-                    <td class="px-6 py-4">
-                        {{ user.createdAt|date("d/m/Y") }}
+                    <td class="px-6 py-4 text-center">
+                        {{ user.createdAt|date("d/m/Y à H:i:s") }}
                     </td>
-                    <td class="px-6 py-4">
-                        {{ user.updatedAt|date("d/m/Y") }}
+                    <td class="px-6 py-4 text-center">
+                        {% if not user.updatedAt %}
+                            x
+                         {% else %}
+                             {{ user.updatedAt|date("d/m/Y à H:i:s") }}
+                        {% endif %}
                     </td>
 
-                    <td class="px-6 py-4 text-right flex gap-4 ">
-                        <a href="{{ path("app.tricks_edit", {id: user.id}) }}"
+                    <td class="px-6 py-4 text-right flex gap-4 text-center">
+                        <a href="{{ path("app.users_update", {id: user.id}) }}"
                            class="btn btn-sm btn-success hover:bg-green-500">Editer</a>
-                        <a href="{{ path("app.tricks_delete", {id: user.id}) }}"
+                        <a href="#"
                            class="btn btn-sm btn-error hover:bg-red-500">Supprimer</a>
                     </td>
                 </tr>
