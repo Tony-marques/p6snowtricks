@@ -62,6 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[Assert\LessThan(100, message: "Votre âge doit être inférieur à 100")]
+    #[Assert\GreaterThan(17, message: "Votre âge doit être supérieur à 0")]
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
