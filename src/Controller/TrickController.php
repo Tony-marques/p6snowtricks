@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -85,13 +87,30 @@ class TrickController extends AbstractController
     #[Route(
         '/{slug}',
         name: '_show_one',
-        methods: ["GET"]
+        methods: ["GET", "POST"]
     )]
     public function showOne(Request $request, EntityManagerInterface $em, Trick $trick): Response
     {
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setCreatedAt(new DateTimeImmutable())
+                ->setUser($this->getUser())
+                ->setTrick($trick);
+
+            $em->persist($comment);
+            $em->flush();
+
+            $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
+        }
 
         return $this->render('trick/show_one.html.twig', [
-            "trick" => $trick
+            "trick" => $trick,
+            "commentForm" => $commentForm->createView(),
+            "comments" => $em->getRepository(Comment::class)->findBy(["trick" => $trick], ["createdAt" => "DESC"])
         ]);
     }
 
