@@ -32,12 +32,9 @@ class TrickVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
+            case self::DELETE:
             case self::EDIT:
                 return $subject->getUser() === $user || in_array("ROLE_ADMIN", $user->getRoles());
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
         }
 
         return false;

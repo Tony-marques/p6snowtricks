@@ -56,7 +56,7 @@ class TrickController extends AbstractController
         }
     }
 
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_USER")]
     #[Route(
         path: '/supprimer/{slug}',
         name: '_delete',
@@ -64,6 +64,8 @@ class TrickController extends AbstractController
     )]
     public function delete(Request $request, EntityManagerInterface $em, Trick $trick): JsonResponse|Response
     {
+        $this->denyAccessUnlessGranted("TRICK_DELETE", $trick);
+
         $em->remove($trick);
         $em->flush();
         if ($request->getMethod() === "POST") {
@@ -81,7 +83,7 @@ class TrickController extends AbstractController
         name: '_edit',
         methods: ["POST"]
     )]
-    public function edit(Request $request, EntityManagerInterface $em, Trick $trick): Response
+    public function edit(Request $request, EntityManagerInterface $em, Trick $trick, SluggerInterface $slugger): Response
     {
         $this->denyAccessUnlessGranted("TRICK_EDIT", $trick);
 
@@ -92,7 +94,8 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setUpdatedAt(new DateTimeImmutable());
+            $trick->setSlug($slugger->slug($trick->getName())->lower())
+                ->setUpdatedAt(new DateTimeImmutable());
             $em->persist($trick);
             $em->flush();
 
@@ -105,7 +108,7 @@ class TrickController extends AbstractController
                 "trick" => $trick
             ]);
         } else {
-            return $this->render('trick/edit.html.twig', [
+            return $this->render(view: 'trick/edit.html.twig', parameters: [
                 "form" => $form->createView(),
                 "trick" => $trick
             ]);
