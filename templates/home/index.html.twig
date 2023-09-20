@@ -59,18 +59,15 @@
                     <div class="card-body p-4 flex flex-row justify-between items-center">
                         <a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}"
                            class="card-title hover:text-white">{{ trickname }}</a>
-                        {% if is_granted("ROLE_USER") %}
+                        {% if is_granted("ROLE_USER") and app.user == trick.user or is_granted("ROLE_ADMIN") %}
                             <div class="card-actions justify-end mt-1">
                                 <a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick"
                                    class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-{#                                <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}"  title="Supprimer le trick"#}
-{#                                   class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">#}
-{#                                    <i class="fa-solid fa-trash-can"></i>#}
-{#                                </a>#}
-                                <button data-slug="{{ trick.slug }}"  title="Supprimer le trick"
-                                   class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+
+                                <button data-slug="{{ trick.slug }}" title="Supprimer le trick"
+                                        class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
                                     <i class="fa-solid fa-trash-can pointer-events-none	"></i>
                                 </button>
                             </div>
