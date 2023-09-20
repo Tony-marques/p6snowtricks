@@ -83,6 +83,8 @@ class TrickController extends AbstractController
     )]
     public function edit(Request $request, EntityManagerInterface $em, Trick $trick): Response
     {
+        $this->denyAccessUnlessGranted("TRICK_EDIT", $trick);
+
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
