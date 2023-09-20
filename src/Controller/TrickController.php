@@ -42,6 +42,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         path: '/supprimer/{slug}',
         name: '_delete',
