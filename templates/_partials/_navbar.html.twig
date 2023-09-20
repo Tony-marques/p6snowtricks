@@ -60,15 +60,7 @@
                     <a href="{{ path("app.register") }}"
                        class="{{ app.request.get('_route') == 'app.register' ? 'active  py-2' :"py-2" }}">Inscription</a>
                 </li>
-            {% else %}
-                <li>
-                    <a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
-                </li>
-            {% endif %}
-            {% if is_granted("ROLE_ADMIN") %}
-                <li>
-                    <a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
-                </li>
+
             {% endif %}
 
 
@@ -85,14 +77,18 @@
                     </label>
                     <ul tabindex="0"
                         class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li>
-                            <a class="justify-between">
-                                Profile
-                                <span class="badge">New</span>
-                            </a>
-                        </li>
-                        <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li>
+                                <a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
+                            </li>
+                        {% endif %}
+                        {% if app.user %}
+                            <li>
+                                <a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
+                            </li>
+                        {% endif %}
+
                     </ul>
                 </div>
             </div>
