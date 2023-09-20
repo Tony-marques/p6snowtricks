@@ -97,6 +97,16 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(path: "/utilisateurs/suppression/{id}", name: "app.users_delete")]
+    public function deleteUser(User $user, EntityManagerInterface $em)
+    {
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute("app.users");
+    }
+
     #[Route(path: "mot-de-passe-oublié", name: "app.forget_password")]
     public function forgetPassword(Request $request): Response
     {
