@@ -10,8 +10,11 @@
 {% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success w-max cursor-pointer absolute top-2 left-3 z-999 min-w-10">{{ message }}</div>
+    {% endfor %}
     <div class="home flex flex-col items-center mb-10">
-        <div class="home-picture">
+        <div class="home-picture z-0">
             <div class="home-slogan">Bienvenue sur SnowTricks</div>
             <a href="#tricks" class="arrow">
                 <i class="fa-solid fa-circle-arrow-down fa-3x "></i>

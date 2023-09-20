@@ -48,14 +48,19 @@ class TrickController extends AbstractController
     #[Route(
         path: '/supprimer/{slug}',
         name: '_delete',
-//        methods: ["POST"]
+        methods: ["GET", "POST"]
     )]
-    public function delete(Request $request, EntityManagerInterface $em, Trick $trick): JsonResponse
+    public function delete(Request $request, EntityManagerInterface $em, Trick $trick): JsonResponse|Response
     {
         $em->remove($trick);
         $em->flush();
+        if ($request->getMethod() === "POST") {
+            $this->addFlash("success", "Le trick {$trick->getName()} a été supprimé avec succès !");
+        }
 
-        return $this->json(["message" => "Le trick {$trick->getName()} a été supprimé avec succès !"]);
+        return $this->json([
+            "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
+        ]);
     }
 
     #[IsGranted("ROLE_ADMIN")]

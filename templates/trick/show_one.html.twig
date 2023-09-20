@@ -4,6 +4,11 @@
     Trick {{ trick.id }}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('showOne') }}
+{% endblock %}
+
 {% block body %}
     <div class="trick-container flex flex-col items-center">
         <div class="trick w-7/12 flex flex-col items-center my-10 border border-gray-500 rounded-lg relative">
@@ -13,10 +18,14 @@
                        class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
                         <i class="fa-solid fa-pencil"></i>
                     </a>
-                    <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}" title="Supprimer le trick"
-                       class="btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </a>
+                    <button title="Supprimer le trick" data-slug="{{ trick.slug }}"
+                       class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+                        <i class="fa-solid fa-trash-can pointer-events-none"></i>
+                    </button>
+{#                    <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}" title="Supprimer le trick"#}
+{#                       class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">#}
+{#                        <i class="fa-solid fa-trash-can"></i>#}
+{#                    </a>#}
                 </div>
             {% endif %}
             <img src="{{ asset("assets/images/home_picture.webp") }}"
