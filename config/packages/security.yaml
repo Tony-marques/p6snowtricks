@@ -16,6 +16,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            remember_me:
+                secret: '%kernel.secret%'
+#                always_remember_me: true
             form_login:
                 login_path: app.login
                 check_path: app.login
