@@ -85,6 +85,9 @@
                         {% endif %}
                         {% if app.user %}
                             <li>
+                                <a href="{{ path("app.tricks_create") }}" class="py-2">Créer mon trick</a>
+                            </li>
+                            <li>
                                 <a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
                             </li>
                         {% endif %}

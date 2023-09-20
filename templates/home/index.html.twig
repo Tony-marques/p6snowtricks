@@ -47,7 +47,7 @@
                 {#                </div> #}
 
                 {#                <div class="trick border-2 border-red-500"> #}
-                {% set maxLength = 15 %}
+                {% set maxLength = 10 %}
                 {% if trick.name|length >= maxLength %}
                     {% set trickname = trick.name|slice(0, maxLength) ~'...' %}
                 {% else %}
@@ -59,7 +59,7 @@
                     <div class="card-body p-4 flex flex-row justify-between items-center">
                         <a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}"
                            class="card-title hover:text-white">{{ trickname }}</a>
-                        {% if is_granted("ROLE_ADMIN") %}
+                        {% if is_granted("ROLE_USER") %}
                             <div class="card-actions justify-end mt-1">
                                 <a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick"
                                    class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">

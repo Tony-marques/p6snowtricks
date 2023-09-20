@@ -19,7 +19,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route(path: "/tricks", name: "app.tricks", methods: ["GET", "POST"])]
 class TrickController extends AbstractController
 {
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_USER")]
     #[Route('/creer', name: '_create')]
     public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
@@ -27,6 +27,8 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
+
+        $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setCreatedAt(new DateTimeImmutable())
@@ -36,12 +38,22 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-            return $this->redirectToRoute("app.tricks_manage");
+            if (in_array("ROLE_ADMIN", $userRole)) {
+                return $this->redirectToRoute("app.tricks_manage");
+            } else {
+                return $this->redirectToRoute("app.home");
+            }
         }
 
-        return $this->render('trick/create.html.twig', [
-            "form" => $form->createView()
-        ]);
+        if (in_array("ROLE_ADMIN", $userRole)) {
+            return $this->render('trick/create_admin.html.twig', [
+                "form" => $form->createView()
+            ]);
+        } else {
+            return $this->render('trick/create.html.twig', [
+                "form" => $form->createView()
+            ]);
+        }
     }
 
     #[IsGranted("ROLE_ADMIN")]
@@ -63,7 +75,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_USER")]
     #[Route(
         '/editer/{slug}',
         name: '_edit',
@@ -75,6 +87,8 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
 
+        $userRole = $this->getUser()->getRoles();
+
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setUpdatedAt(new DateTimeImmutable());
             $em->persist($trick);
@@ -83,10 +97,17 @@ class TrickController extends AbstractController
             return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
         }
 
-        return $this->render("trick/edit.html.twig", [
-            "form" => $form->createView(),
-            "trick" => $trick
-        ]);
+        if (in_array("ROLE_ADMIN", $userRole)) {
+            return $this->render("trick/edit_admin.html.twig", [
+                "form" => $form->createView(),
+                "trick" => $trick
+            ]);
+        } else {
+            return $this->render('trick/edit.html.twig', [
+                "form" => $form->createView(),
+                "trick" => $trick
+            ]);
+        }
     }
 
     #[Route(
