@@ -54,7 +54,7 @@
                     <div class="bg-white rounded-lg p-2 text-black">Date
                         Modification: {{ trick.updatedAt|date("d/m/Y à H:i:s") }}</div>
                 {% endif %}
-                <div class="bg-white rounded-lg p-2 text-black">Groupe: tricks</div>
+                <div class="bg-white rounded-lg p-2 text-black">Catégorie: {{ trick.category.name }}</div>
             </div>
             <div class="separator h-[0.1rem] w-full bg-neutral-400 lg:w-2/3 mt-3 mb-6"></div>
             {% if app.user %}
