@@ -18,7 +18,10 @@ class RegisterType extends AbstractType
                 "required" => false,
 
                 'attr' => [
-                    "placeholder" => "Nom@gmail.com"
+                    "placeholder" => "Nom@gmail.com",
+
+
+
 //                    'class' => 'bg-green-500 form-input focus:outline-none focus:ring focus:border-blue-300'
                 ]
             ])

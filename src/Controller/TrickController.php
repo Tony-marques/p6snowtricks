@@ -34,7 +34,8 @@ class TrickController extends AbstractController
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
                 ->setSlug($slugger->slug($trick->getName())->lower());
-
+////            ->setCategory(3);
+//dd($trick);
             $em->persist($trick);
             $em->flush();
 

@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-#[UniqueEntity(fields: "name",message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre.")]
+#[UniqueEntity(fields: "name", message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre.")]
 class Trick
 {
     #[ORM\Id]
@@ -58,6 +58,10 @@ class Trick
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
+
+    #[ORM\ManyToOne(inversedBy: 'trick')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function __construct()
     {
@@ -194,4 +198,17 @@ class Trick
 
         return $this;
     }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
 }
