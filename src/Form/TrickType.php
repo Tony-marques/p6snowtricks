@@ -21,7 +21,7 @@ class TrickType extends AbstractType
 
             ])
             ->add("category", EntityType::class, [
-                "placeholder" => "Selectionner une catégorie",
+                "placeholder" => "Sélectionner une catégorie",
 //                "mapped" => false,
                 "class" => Category::class,
                 "choice_label" => "name"

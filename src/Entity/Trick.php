@@ -33,7 +33,7 @@ class Trick
     #[Assert\NotBlank(message: "Veuillez renseigner un titre")]
     #[Assert\Length(
         min: 20,
-        minMessage: "Le titre doit faire au minimum {{ limit }} caractères, il fait actuellement {{ value_length }} caractères",
+        minMessage: "La description doit faire au minimum {{ limit }} caractères, elle fait actuellement {{ value_length }} caractères",
     )]
     private ?string $description = null;
 
