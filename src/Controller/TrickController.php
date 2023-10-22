@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,8 +35,7 @@ class TrickController extends AbstractController
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
                 ->setSlug($slugger->slug($trick->getName())->lower());
-////            ->setCategory(3);
-//dd($trick);
+
             $em->persist($trick);
             $em->flush();
 
@@ -119,12 +119,27 @@ class TrickController extends AbstractController
     #[Route(
         '/{slug}',
         name: '_show_one',
+//        defaults: [
+//            "commentsPage" => 1
+//        ],
+//        requirements: [
+//            "commentsPage" => "\d+"
+//        ],
         methods: ["GET", "POST"]
     )]
-    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick): Response
+    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo): Response
     {
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
+
+        $comments = $commentRepo->findBy(["trick" => $trick]);
+        $currentPage = $request->get("page") ?? "1";
+        $limit = 3;
+        $totalComments = count($comments);
+        $offset = ($currentPage - 1) * $limit;
+        $totalPages = ceil($totalComments / $limit);
+
+        $commentForOnePage = array_slice($comments, $offset, $limit);
 
         $commentForm->handleRequest($request);
 
@@ -142,7 +157,9 @@ class TrickController extends AbstractController
         return $this->render('trick/show_one.html.twig', [
             "trick" => $trick,
             "commentForm" => $commentForm->createView(),
-            "comments" => $em->getRepository(Comment::class)->findBy(["trick" => $trick], ["createdAt" => "DESC"])
+            "comments" => $commentForOnePage,
+            "totalPages" => $totalPages,
+            "currentPage" => $currentPage
         ]);
     }
 
