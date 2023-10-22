@@ -19,13 +19,13 @@
                         <i class="fa-solid fa-pencil"></i>
                     </a>
                     <button title="Supprimer le trick" data-slug="{{ trick.slug }}"
-                       class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+                            class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
                         <i class="fa-solid fa-trash-can pointer-events-none"></i>
                     </button>
-{#                    <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}" title="Supprimer le trick"#}
-{#                       class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">#}
-{#                        <i class="fa-solid fa-trash-can"></i>#}
-{#                    </a>#}
+                    {#                    <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}" title="Supprimer le trick" #}
+                    {#                       class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white"> #}
+                    {#                        <i class="fa-solid fa-trash-can"></i> #}
+                    {#                    </a> #}
                 </div>
             {% endif %}
             <img src="{{ asset("assets/images/home_picture.webp") }}"
@@ -87,8 +87,14 @@
                     </div>
                 {% endfor %}
 
+                <div class="pagination">
+                    {% for page in 1..totalPages %}
+                        {% set backgroundColor = page == currentPage ? "bg-gray-500" : "bg-white" %}
+                        <a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center"
+                           href="{{ path("app.tricks_show_one", {"slug": trick.slug, "page": page}) }}">{{ page }}</a>
+                    {% endfor %}
+                </div>
 
-                    <button class="btn w-max mt-2">Charger plus</button>
             </div>
         </div>
     </div>
