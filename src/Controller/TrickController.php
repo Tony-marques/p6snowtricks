@@ -157,12 +157,14 @@ class TrickController extends AbstractController
 
         $comments = $commentRepo->findBy(["trick" => $trick]);
         $currentPage = $request->get("page") ?? "1";
-        $limit = 3;
+        $limit = 4;
         $totalComments = count($comments);
         $offset = ($currentPage - 1) * $limit;
         $totalPages = ceil($totalComments / $limit);
 
-        $commentForOnePage = array_slice($comments, $offset, $limit);
+        $commentsReverse = \array_reverse($comments);
+
+        $commentForOnePage = array_slice($commentsReverse, $offset, $limit);
 
         $commentForm->handleRequest($request);
 
