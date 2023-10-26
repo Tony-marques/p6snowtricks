@@ -6,10 +6,12 @@ use App\Entity\Category;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class TrickType extends AbstractType
 {
@@ -22,19 +24,27 @@ class TrickType extends AbstractType
             ])
             ->add("category", EntityType::class, [
                 "placeholder" => "Sélectionner une catégorie",
-//                "mapped" => false,
                 "class" => Category::class,
                 "choice_label" => "name"
             ])
+            ->add("images", FileType::class, [
+                "mapped" => false,
+                "multiple" => true,
+                // "constraints" => [
+                //     new File([
+                //         "mimeTypes" => [
+                //             'image/webp',
+                //             'image/jpeg',
+                //             'image/png',
+                //             'image/gif'
+                //         ],
+                //         'mimeTypesMessage' => 'Le type du fich',
+                //     ])
+                // ]
+            ])
             ->add('description', TextareaType::class, [
                 "required" => false
-            ])
-            // ->add('image')
-            // ->add('video')
-            // ->add('createdAt')
-            // ->add('updatedAt')
-            // ->add('user')
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
