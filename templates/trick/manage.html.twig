@@ -47,6 +47,8 @@
                     </td>
 
                     <td class="px-6 py-4 text-right flex gap-4 ">
+                        <a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}"
+                           class="btn btn-sm btn-info hover:bg-blue-500">Voir</a>
                         <a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}"
                            class="btn btn-sm btn-success hover:bg-green-500">Editer</a>
                         <a href="{{ path("app.tricks_delete", {slug: trick.slug}) }}"
