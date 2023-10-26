@@ -28,13 +28,14 @@
 				</div>
 			{% endif %}
 			<img src="{{ asset("assets/images/home_picture.webp") }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="">
-			<div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
+			<div
+				class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
 				{# <img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
-				<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
-				<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
-				<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
-				<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
-				<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg"> #}
+																<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
+																<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
+																<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
+																<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg">
+																<img src="{{ asset("assets/images/default-profile.jpg") }}" alt="" class="w-[22%] h-36 object-cover rounded-lg"> #}
 				{% for image in trick.images %}
 					<img src="{{ asset('upload/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
 				{% endfor %}
@@ -44,11 +45,11 @@
 			</div>
 			<div class="informations flex mt-6 gap-2">
 				<div class="bg-white rounded-lg p-2 text-black">Date
-					                    création:
+																				                    création:
 					{{ trick.createdAt|date("d/m/Y à H:i:s") }}</div>
 				{% if trick.updatedAt %}
 					<div class="bg-white rounded-lg p-2 text-black">Date
-						                        Modification:
+																								                        Modification:
 						{{ trick.updatedAt|date("d/m/Y à H:i:s") }}</div>
 				{% endif %}
 				<div class="bg-white rounded-lg p-2 text-black">Catégorie:
@@ -66,8 +67,7 @@
 
 					<button class="btn btn-md">Laissez un commentaire</button>
 				</div>
-				{{ form_end(commentForm) }}
-				{#                <div class="create-comment flex gap-4"> #}
+				{{ form_end(commentForm) }}{#                <div class="create-comment flex gap-4"> #}
 				{#                    <input type="text" name="" id="" class="rounded-lg"> #}
 				{#                    <button class="btn btn-md">Laissez un commentaire</button> #}
 				{#                </div> #}<div class="separator h-[0.1rem] w-full bg-neutral-400 lg:w-2/3 mt-10 mb-6"> </div>
@@ -83,10 +83,12 @@
 				{% endfor %}
 
 				<div class="pagination">
-					{% for page in 1..totalPages %}
-						{% set backgroundColor = page == currentPage ? "bg-gray-500" : "bg-white" %}
-						<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.tricks_show_one", {"slug": trick.slug, "page": page}) }}">{{ page }}</a>
-					{% endfor %}
+					{% if totalPages > 1 %}
+						{% for page in 1..totalPages %}
+							{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
+							<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.tricks_show_one", {"slug": trick.slug, "page": page}) }}">{{ page }}</a>
+						{% endfor %}
+					{% endif %}
 				</div>
 
 			</div>
