@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ImageRepository;
-use App\Trait\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use App\Trait\TimestampableTrait;
+use App\Repository\ImageRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
 {
     use TimestampableTrait;
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,6 +19,8 @@ class Image
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    private $file;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
@@ -36,6 +39,18 @@ class Image
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }

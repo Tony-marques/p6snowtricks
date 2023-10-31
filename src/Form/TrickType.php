@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,9 +28,7 @@ class TrickType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name"
             ])
-            ->add("images", FileType::class, [
-                "mapped" => false,
-                "multiple" => true,
+            ->add("mainImage", FileType::class, [
                 // "constraints" => [
                 //     new File([
                 //         "mimeTypes" => [
@@ -41,6 +40,12 @@ class TrickType extends AbstractType
                 //         'mimeTypesMessage' => 'Le type du fich',
                 //     ])
                 // ]
+            ])
+            ->add("images", CollectionType::class, [
+                "entry_type" => ImageType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                // 'by_reference' => false,
             ])
             ->add('description', TextareaType::class, [
                 "required" => false

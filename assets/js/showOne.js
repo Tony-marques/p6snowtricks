@@ -1,5 +1,7 @@
 const btn = document.querySelector(".delete")
 
+console.log("test");
+
 btn.addEventListener("click", (e) => {
     // e.stopPropagation()
     const slug = e.target.dataset.slug;
