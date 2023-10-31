@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
 use App\Entity\Trick;
 use DateTimeImmutable;
 use App\Entity\Comment;
@@ -10,14 +9,11 @@ use App\Form\TrickType;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use SebastianBergmann\Template\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
-// use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -36,31 +32,35 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile */
-            $imageFiles = $form->get('images')->getData();
 
-            foreach ($imageFiles as $imageFile) {
-                // Téléchargez et enregistrez l'image dans un répertoire de votre choix
-                $filename = md5(uniqid()) . '.' . $imageFile->guessExtension();
-                $imageFile->move("upload", $filename);
+            $imageFile = $form->get('mainImage')->getData();
+            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move("upload", $nameImage);
 
-                // Créez une entité Image pour chaque image et associez-la au produit
-                $image = new Image();
-                $image->setTrick($trick)
-                    ->setName($filename)
-                    ->setCreatedAt(new DateTimeImmutable());
+            foreach ($trick->getImages() as $image) {
 
-                $em->persist($image);
+                $file = $image->getFile();
+                $name = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move(
+                    "upload",
+                    $name
+                );
+
+                $image->setName($name);
+                $image->setCreatedAt(new DateTimeImmutable());
+                $image->setTrick($trick);
+                $trick->addImage($image);
             }
 
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
-                ->setSlug($slugger->slug($trick->getName())->lower());
+                ->setSlug($slugger->slug($trick->getName())->lower())
+                ->setMainImage($nameImage);
 
             $em->persist($trick);
 
             $em->flush();
-
 
             if (in_array("ROLE_ADMIN", $userRole)) {
                 return $this->redirectToRoute("app.tricks_manage");
@@ -142,12 +142,6 @@ class TrickController extends AbstractController
     #[Route(
         '/{slug}',
         name: '_show_one',
-        //        defaults: [
-        //            "commentsPage" => 1
-        //        ],
-        //        requirements: [
-        //            "commentsPage" => "\d+"
-        //        ],
         methods: ["GET", "POST"]
     )]
     public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo): Response
@@ -168,6 +162,8 @@ class TrickController extends AbstractController
 
         $commentForm->handleRequest($request);
 
+        dump($comments);
+
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
@@ -176,7 +172,7 @@ class TrickController extends AbstractController
             $em->persist($comment);
             $em->flush();
 
-            $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
+            return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
         }
 
         return $this->render('trick/show_one.html.twig', [

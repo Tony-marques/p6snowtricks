@@ -47,6 +47,9 @@ class Trick
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $mainImage = null;
+
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
@@ -54,7 +57,7 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $images;
 
     public function __construct()
@@ -184,6 +187,26 @@ class Trick
                 $image->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of mainImage
+     */ 
+    public function getMainImage()
+    {
+        return $this->mainImage;
+    }
+
+    /**
+     * Set the value of mainImage
+     *
+     * @return  self
+     */ 
+    public function setMainImage($mainImage)
+    {
+        $this->mainImage = $mainImage;
 
         return $this;
     }
