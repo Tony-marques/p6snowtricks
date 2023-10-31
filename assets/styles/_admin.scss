@@ -5,12 +5,10 @@
    .separator {
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       margin: 0 1rem;
-      // margin: 0 0.5rem;
    }
 
    nav {
       background: #4e73df;
-      // padding: 1rem 0;
 
       .logo-name {
          display: flex;
@@ -31,7 +29,6 @@
 
       .dashboard {
          display: flex;
-         // justify-content: space-between;
          gap: 0.5rem;
          align-items: center;
          color: white;
@@ -48,9 +45,6 @@
       .tricks, .users,.comments,.back {
          display: flex;
          flex-direction: column;
-         // gap: 0.5rem;
-         //  padding: 0.75rem 0.5rem;
-         //  margin: 0.25rem 0.5rem;
 
          p {
             color: #95abec;
@@ -62,7 +56,6 @@
 
          a {
             color: white;
-            // padding: 0.5rem 0;
             padding: 0.75rem 0.5rem;
             margin: 0 0.5rem;
             margin-bottom: 0.25rem;
@@ -81,7 +74,6 @@
                 align-items: center;
                 justify-content: center;
                 width: 20px;
-                // border: 1px solid red;
 
                }
             }

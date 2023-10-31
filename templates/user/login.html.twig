@@ -12,19 +12,6 @@
 
     <div class="login-container flex flex-col items-center justify-center flex-1">
 
-        {#        <form action="{{path("app.login")}}" method="post"> #}
-
-        {#            <input type="email" name="_username" value="{{username}}" id=""> #}
-        {#            <input type="password" name="_password" id=""> #}
-        {#            <label for=""> #}
-        {#                <input type="checkbox" name="_remember_me" id="">Se souvenir de moi</label> #}
-        {#            <input type="hidden" name="_csrf_token" value="{{csrf_token("authenticate")}}"> #}
-        {#            <input type="hidden" name="app.home" value="/home"/> #}
-        {#            <button type="submit">Connexion</button> #}
-        {#        </form> #}
-        {#    </div> #}
-
-
         <form action="{{ path("app.login") }}" method="post" class="w-[500px]">
             <div class="mb-6">
                 <label for="email" class="block mb-2 text-sm font-medium text-white dark:text-white">Adresse

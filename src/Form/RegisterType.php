@@ -19,17 +19,12 @@ class RegisterType extends AbstractType
 
                 'attr' => [
                     "placeholder" => "Nom@gmail.com",
-
-
-
-//                    'class' => 'bg-green-500 form-input focus:outline-none focus:ring focus:border-blue-300'
                 ]
             ])
             ->add('pseudo', TextType::class, [
                 "required" => false,
                 "attr" => [
                     "placeholder" => "Votre pseudo"
-//                    "class" => "bg-green-700"
                 ]
             ])
             ->add('password', PasswordType::class, [
