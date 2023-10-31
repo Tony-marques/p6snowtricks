@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\EditUserType;
 use App\Form\ForgetPasswordType;
-use App\Repository\UserRepository;
 use DateTimeImmutable;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,10 +21,6 @@ class UserController extends AbstractController
     #[Route(path: '/inscription', name: 'app.register')]
     public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute("app.home");
-        // }
-
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
 
@@ -49,10 +44,6 @@ class UserController extends AbstractController
     #[Route('/connexion', name: 'app.login')]
     public function connexion(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //    return $this->redirectToRoute("app.home");
-        // }
-
         $error = $authenticationUtils->getLastAuthenticationError();
         $username = $authenticationUtils->getLastUsername();
 
@@ -80,7 +71,7 @@ class UserController extends AbstractController
     #[Route(path: "/utilisateurs/edition/{id}", name: "app.users_update")]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
     {
-//        Créer la logique un utilisateur peut modifier uniquement son profil (les voters)
+        //        Créer la logique un utilisateur peut modifier uniquement son profil (les voters)
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
@@ -120,7 +111,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
         }
 
         return $this->render("user/forgetPassword.html.twig", [

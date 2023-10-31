@@ -1,101 +1,63 @@
-{# <header class="navbar-container"> #}
-{#    <navbar class="navbar"> #}
-{#        <a class="" href="{{ path("app.home") }}"> #}
-{#            <img src="{{ asset("/assets/images/logo.png") }}" alt="" class="logo"></a> #}
-{#        <ul class=""> #}
-{#            <li> #}
-{#                <a href="{{ path("app.home") }}" #}
-{#                   class="{{ app.request.attributes.get('_route') == "app.home" ? "active" : "" }}">Accueil</a> #}
-{#            </li> #}
-{#            <li> #}
-{#                <a href="{{ path("app.home", {"_fragment": "tricks"}) }}">Tricks</a> #}
-{#            </li> #}
-
-{#            {% if not app.user %} #}
-{#                <li> #}
-{#                    <a href="{{ path("app.login") }}" #}
-{#                       class="{{ app.request.get('_route') == 'app.login' ? 'active' :"" }}">Connexion</a> #}
-{#                </li> #}
-{#                <li> #}
-{#                    <a href="{{ path("app.register") }}" #}
-{#                       class="{{ app.request.get('_route') == 'app.register' ? 'active' :"" }}">Inscription</a> #}
-{#                </li> #}
-{#            {% else %} #}
-{#                <li> #}
-{#                    <a href="{{ path("app.logout") }}">Déconnexion</a> #}
-{#                </li> #}
-{#            {% endif %} #}
-
-{#            <li> #}
-{#                #}{# <a href="{{path("app.dashboard")}}">Dashboard</a> #}
-{#            </li> #}
-
-{#        </ul> #}
-{#    </navbar> #}
-{# </header> #}
-
 <header class="navbar bg-base-100 justify-center">
-    <div class="w-[1200px] justify-between">
+	<div class="w-[1200px] justify-between">
 
-        <div class=" ">
-            <a class="btn btn-ghost normal-case text-xl">
-                <img src="{{ asset("/assets/images/logo.png") }}" alt="" class="w-[75px]">
-            </a>
-        </div>
+		<div class=" ">
+			<a class="btn btn-ghost normal-case text-xl">
+				<img src="{{ asset("/assets/images/logo.png") }}" alt="" class="w-[75px]">
+			</a>
+		</div>
 
-        <ul tabindex="0" class="menu menu-sm z-[1] p-2 shadow bg-base-100 rounded-box flex flex-row gap-2">
-            <li>
+		<ul tabindex="0" class="menu menu-sm z-[1] p-2 shadow bg-base-100 rounded-box flex flex-row gap-2">
+			<li>
 
-                <a href="{{ path("app.home") }}"
-                   class="{{ app.request.attributes.get('_route') == "app.home" ? "active py-2" : "py-2" }}">Accueil</a>
-            </li>
-            <li><a href="{{ path("app.home", {"_fragment": "tricks"}) }}" class="py-2">Tricks</a></li>
+				<a href="{{ path("app.home") }}" class="{{ app.request.attributes.get('_route') == "app.home" ? "active py-2" : "py-2" }}">Accueil</a>
+			</li>
+			<li>
+				<a href="{{ path("app.home", {"_fragment": "tricks"}) }}" class="py-2">Tricks</a>
+			</li>
 
-            {% if not app.user %}
-                <li>
-                    <a href="{{ path("app.login") }}"
-                       class="{{ app.request.get('_route') == 'app.login' ? 'active py-2' :"py-2" }}">Connexion</a>
-                </li>
-                <li>
-                    <a href="{{ path("app.register") }}"
-                       class="{{ app.request.get('_route') == 'app.register' ? 'active  py-2' :"py-2" }}">Inscription</a>
-                </li>
+			{% if not app.user %}
+				<li>
+					<a href="{{ path("app.login") }}" class="{{ app.request.get('_route') == 'app.login' ? 'active py-2' :"py-2" }}">Connexion</a>
+				</li>
+				<li>
+					<a href="{{ path("app.register") }}" class="{{ app.request.get('_route') == 'app.register' ? 'active py-2' :"py-2" }}">Inscription</a>
+				</li>
 
-            {% endif %}
+			{% endif %}
 
 
-        </ul>
+		</ul>
 
-        {% if app.user %}
+		{% if app.user %}
 
-            <div class="flex-none">
-                <div class="dropdown dropdown-end">
-                    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                        <div class="w-10 rounded-full">
-                            <img src="{{ asset("/assets/images/pp.png") }}"/>
-                        </div>
-                    </label>
-                    <ul tabindex="0"
-                        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+			<div class="flex-none">
+				<div class="dropdown dropdown-end">
+					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+						<div class="w-10 rounded-full">
+							<img src="{{ asset("/assets/images/pp.png") }}"/>
+						</div>
+					</label>
+					<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
 
-                        {% if is_granted("ROLE_ADMIN") %}
-                            <li>
-                                <a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
-                            </li>
-                        {% endif %}
-                        {% if app.user %}
-                            <li>
-                                <a href="{{ path("app.tricks_create") }}" class="py-2">Créer mon trick</a>
-                            </li>
-                            <li>
-                                <a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
-                            </li>
-                        {% endif %}
+						{% if is_granted("ROLE_ADMIN") %}
+							<li>
+								<a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
+							</li>
+						{% endif %}
+						{% if app.user %}
+							<li>
+								<a href="{{ path("app.tricks_create") }}" class="py-2">Créer mon trick</a>
+							</li>
+							<li>
+								<a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>
+							</li>
+						{% endif %}
 
-                    </ul>
-                </div>
-            </div>
-        {% endif %}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
 
-    </div>
+	</div>
 </header>

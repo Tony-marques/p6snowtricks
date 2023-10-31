@@ -26,7 +26,6 @@ class CommentType extends AbstractType
                     "class" => "btn btn-md"
                 ], 
                 "label" => "Laissez un commentaire",
-                // "disabled"=> true
             ]);
     }
 
