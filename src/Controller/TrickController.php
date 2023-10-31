@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Helpers\Paginator;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -144,25 +145,17 @@ class TrickController extends AbstractController
         name: '_show_one',
         methods: ["GET", "POST"]
     )]
-    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo): Response
+    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo, Paginator $paginator): Response
     {
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
 
         $comments = $commentRepo->findBy(["trick" => $trick]);
         $currentPage = $request->get("page") ?? "1";
-        $limit = 4;
-        $totalComments = count($comments);
-        $offset = ($currentPage - 1) * $limit;
-        $totalPages = ceil($totalComments / $limit);
 
-        $commentsReverse = \array_reverse($comments);
-
-        $commentForOnePage = array_slice($commentsReverse, $offset, $limit);
+        [$commentForOnePage, $totalPages] = $paginator->paginate(items: $comments, currentPage: $currentPage, limit: 4);
 
         $commentForm->handleRequest($request);
-
-        dump($comments);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $comment->setCreatedAt(new DateTimeImmutable())
