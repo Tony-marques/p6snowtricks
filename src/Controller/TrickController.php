@@ -36,7 +36,7 @@ class TrickController extends AbstractController
 
             $imageFile = $form->get('mainImage')->getData();
             $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            $imageFile->move("upload", $nameImage);
+            $imageFile->move("upload/tricks", $nameImage);
 
             foreach ($trick->getImages() as $image) {
 

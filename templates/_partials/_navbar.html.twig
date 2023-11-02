@@ -35,7 +35,11 @@
 				<div class="dropdown dropdown-end">
 					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
 						<div class="w-10 rounded-full">
-							<img src="{{ asset("/assets/images/pp.png") }}"/>
+							{% if app.user.profileImage %}
+								<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}"/>
+							{% else %}
+								<img src="{{ asset("/assets/images/default-profile.jpg") }}"/>
+							{% endif %}
 						</div>
 					</label>
 					<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
@@ -48,6 +52,9 @@
 						{% if app.user %}
 							<li>
 								<a href="{{ path("app.tricks_create") }}" class="py-2">Créer mon trick</a>
+							</li>
+							<li>
+								<a href="{{ path("app.show_profile", {id: app.user.id}) }}" class="py-2">Mon profil</a>
 							</li>
 							<li>
 								<a href="{{ path("app.logout") }}" class="py-2">Déconnexion</a>

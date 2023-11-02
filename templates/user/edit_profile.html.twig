@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<div class="register-container flex items-center justify-center flex-1 flex-col ">
+		{% if user.profileImage %}
+			<img src="{{asset("upload/profile/" ~ user.profileImage)}}" alt="" class="w-40 h-40 rounded-full object-cover">
+		{% endif %}
+		{{ form_start(form, {attr: {class: "w-[500px]"}}) }}
+		<div class="mb-6">
+			{{ form_label(form.profileImage, "Image de profil", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+			{{ form_widget(form.profileImage, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.profileImage) }}
+		</div>
+		<div class="mb-6">
+			{{ form_label(form.pseudo, "Pseudo", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+			{{ form_widget(form.pseudo, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.pseudo) }}
+		</div>
+		<div class="mb-6">
+			{{ form_label(form.age, "Age", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+			{{ form_widget(form.age, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.age) }}
+		</div>
+
+		<button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+			Modifier
+		</button>
+		{{ form_end(form) }}
+	</div>
+
+{% endblock %}
