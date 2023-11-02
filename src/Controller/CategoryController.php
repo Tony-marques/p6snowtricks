@@ -35,6 +35,8 @@ class CategoryController extends AbstractController
 
             $this->em->persist($category);
             $this->em->flush();
+
+            return $this->redirectToRoute("categories_manage");
         }
 
         return $this->render('category/index.html.twig', [
@@ -45,9 +47,8 @@ class CategoryController extends AbstractController
     #[Route(path: "/", name: "manage")]
     public function manageCategory(): Response
     {
-
         return $this->render("category/manage.html.twig", [
-            "categories" => $this->em->getRepository(Category::class)->findBy([], ["createdAt" => "ASC"]),
+            "categories" => $this->em->getRepository(Category::class)->findBy([], ["createdAt" => "DESC"]),
         ]);
     }
 
@@ -59,12 +60,16 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category->setCreatedAt(new \DateTimeImmutable())
+            $category
                 ->setSlug($slugger->slug($category->getName())->lower())
                 ->setUpdatedAt(new \DateTimeImmutable());
+
             $this->em->persist($category);
             $this->em->flush();
+
+            return $this->redirectToRoute("categories_manage");
         }
+
         return $this->render("category/edit.html.twig", [
             "category" => $category,
             "form" => $form->createView()
@@ -72,7 +77,8 @@ class CategoryController extends AbstractController
     }
 
     #[Route(path: "/supprimer/{slug}", name: "delete")]
-    public function delete(Category $category){
+    public function delete(Category $category)
+    {
         $this->em->remove($category);
         $this->em->flush();
 

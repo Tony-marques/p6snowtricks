@@ -6,7 +6,8 @@
 
 {% block body %}
 
-    <div class="tricks-create-container flex items-center justify-center flex-1">
+    <div class="tricks-create-container flex items-center justify-center flex-1 flex-col">
+    <p class="w-[700px] mb-4">Editer une catégorie</p>
         {{ form_start(form, {attr: {class: "w-[700px]"}}) }}
         <div class="mb-6">
             {{ form_label(form.name, "Titre", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
