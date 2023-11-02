@@ -6,7 +6,8 @@
 
 {% block body %}
 
-    <div class="group-create-container flex items-center justify-center flex-1">
+    <div class="group-create-container flex items-center justify-center flex-1 flex-col">
+    <p class="w-[700px] mb-4">Créer une catégorie</p>
         {{ form_start(form, {attr: {class: "w-[700px]"}}) }}
         <div class="mb-6">
             {{ form_label(form.name, "Nom", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
