@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\EditUserType;
+use App\Form\EditUserAdminType;
+use App\Form\ShowUserType;
 use App\Form\ForgetPasswordType;
 use DateTimeImmutable;
 use App\Form\RegisterType;
@@ -72,7 +73,7 @@ class UserController extends AbstractController
     public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
     {
         //        Créer la logique un utilisateur peut modifier uniquement son profil (les voters)
-        $form = $this->createForm(EditUserType::class, $user);
+        $form = $this->createForm(EditUserAdminType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -114,6 +115,39 @@ class UserController extends AbstractController
         }
 
         return $this->render("user/forgetPassword.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route(path: "/profil/{id}", name: "app.show_profile")]
+    public function showProfile(User $user): Response
+    {
+        return $this->render("user/show_profile.html.twig", [
+            "user" => $user
+        ]);
+    }
+
+    #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
+    public function editProfile(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ShowUserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('profileImage')->getData();
+            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move("upload/profile", $nameImage);
+
+            $user->setProfileImage($nameImage);
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute("app.show_profile");
+        }
+
+        return $this->render("user/edit_profile.html.twig", [
+            "user" => $user,
             "form" => $form->createView()
         ]);
     }

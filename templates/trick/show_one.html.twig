@@ -24,11 +24,11 @@
 
 				</div>
 			{% endif %}
-			<img src="{{ asset("upload/" ~ trick.mainImage) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="">
+			<img src="{{ asset("upload/tricks/" ~ trick.mainImage) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.name}}">
 			<div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
 
 				{% for image in trick.images %}
-					<img src="{{ asset('upload/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
+					<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Image {{image.name[0:image.name|length - 5]}}" class="w-[22%] h-36 object-cover rounded-lg">
 				{% endfor %}
 			</div>
 			<div class="description w-10/12 mt-10 p-4 bg-white text-gray-700 rounded-lg">
@@ -65,7 +65,14 @@
 
 				{% for comment in comments %}
 					<div class="comment flex gap-4 items-center">
-						<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="">
+					{% if app.user.profileImage %}
+						<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}" class="w-10 h-10 rounded-full object-cover" alt="Photo de profil de {{app.user.pseudo}}">
+
+					{% else %}
+						<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="Photo de profil par défault">
+						
+					{% endif %}
+					
 						<div class="p-2 bg-white rounded text-gray-700 w-[500px] h-[88px]">{{ comment.content }}
 						</div>
 					</div>

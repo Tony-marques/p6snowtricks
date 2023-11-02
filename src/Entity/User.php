@@ -59,6 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $pseudo = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $profileImage = null;
+
     #[Assert\LessThan(100, message: "Votre âge doit être inférieur à 100")]
     #[Assert\GreaterThan(17, message: "Votre âge doit être supérieur à 0")]
     #[ORM\Column(nullable: true)]
@@ -193,6 +196,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of profileImage
+     */ 
+    public function getProfileImage()
+    {
+        return $this->profileImage;
+    }
+
+    /**
+     * Set the value of profileImage
+     *
+     * @return  self
+     */ 
+    public function setProfileImage($profileImage)
+    {
+        $this->profileImage = $profileImage;
 
         return $this;
     }

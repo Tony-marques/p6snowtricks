@@ -31,7 +31,7 @@
 					{% set trickname = trick.name %}
 				{% endif %}
 				<div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
-					<figure><img src="{{ asset("upload/" ~ trick.mainImage) }}" class="h-[200px] object-cover" alt="Shoes" class="w-full"/>
+					<figure><img src="{{ asset("upload/tricks/" ~ trick.mainImage) }}" class="h-[200px] object-cover" alt="trick {{trick.name}}" class="w-full"/>
 					</figure>
 					<div class="card-body p-4 flex flex-row justify-between items-center">
 						<a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}" class="card-title hover:text-white">{{ trickname }}</a>
