@@ -15,6 +15,11 @@
 			{{ form_errors(form.name) }}
 		</div>
 		<div class="mb-6">
+			{{ form_label(form.mainImage, "Image principale", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+			{{ form_widget(form.mainImage, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.mainImage) }}
+		</div>
+		<div class="mb-6">
 			{{ form_label(form.category, "Catégorie", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
 			{{ form_widget(form.category, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
 			{{ form_errors(form.category) }}
@@ -24,10 +29,11 @@
 			{{ form_widget(form.images, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
 			{{ form_errors(form.images) }}
 		</div>
-
+<div class="images flex justify-center gap-2">
 		{% for image in trick.images %}
-			<img src="{{ asset('upload/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
+			<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
 		{% endfor %}
+</div>
 
 		<div class="mb-6">
 			{{ form_label(form.description, "Description", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}

@@ -21,7 +21,6 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 "required" => false,
-
             ])
             ->add("category", EntityType::class, [
                 "placeholder" => "Sélectionner une catégorie",
@@ -29,22 +28,24 @@ class TrickType extends AbstractType
                 "choice_label" => "name"
             ])
             ->add("mainImage", FileType::class, [
-                // "constraints" => [
-                //     new File([
-                //         "mimeTypes" => [
-                //             'image/webp',
-                //             'image/jpeg',
-                //             'image/png',
-                //             'image/gif'
-                //         ],
-                //         'mimeTypesMessage' => 'Le type du fich',
-                //     ])
-                // ]
+                "label" => false,
+                "constraints" => [
+                    new File([
+                        "mimeTypes" => [
+                            'image/webp',
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté',
+                    ])
+                ]
             ])
             ->add("images", CollectionType::class, [
                 "entry_type" => ImageType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                "label" => false
             ])
             ->add('description', TextareaType::class, [
                 "required" => false

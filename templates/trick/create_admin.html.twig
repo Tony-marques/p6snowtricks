@@ -29,8 +29,8 @@
 			{{ form_errors(form.mainImage) }}
 		</div>
 		<div class="col pt-2 pb-5 d-flex flex-column" id="newTrickImages">
-			<button type="button" id="add-image" class="add_item_link btn btn-info" data-collection-holder-class="images">Add an image</button>
-			<ul class="images" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+			<button type="button" id="add-image" class="add_item_link btn btn-info" data-collection-holder-class="images">Ajouter une image</button>
+			<ul class="images mt-2" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
 				{% for image in form.images %}{% endfor %}
 			</ul>
 

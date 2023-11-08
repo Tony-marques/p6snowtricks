@@ -48,7 +48,7 @@ class Trick
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $mainImage = null;
+    private $mainImage = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;

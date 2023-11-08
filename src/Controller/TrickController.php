@@ -33,8 +33,8 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $imageFile = $form->get('mainImage')->getData();
+            // \dd(\get_class($imageFile));
             $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
             $imageFile->move("upload/tricks", $nameImage);
 
@@ -44,7 +44,7 @@ class TrickController extends AbstractController
                 $name = md5(uniqid()) . '.' . $file->guessExtension();
 
                 $file->move(
-                    "upload",
+                    "upload/tricks",
                     $name
                 );
 

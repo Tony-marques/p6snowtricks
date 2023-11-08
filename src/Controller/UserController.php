@@ -8,6 +8,7 @@ use App\Form\ShowUserType;
 use App\Form\ForgetPasswordType;
 use DateTimeImmutable;
 use App\Form\RegisterType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,8 +100,8 @@ class UserController extends AbstractController
         return $this->redirectToRoute("app.users");
     }
 
-    #[Route(path: "mot-de-passe-oublié", name: "app.forget_password")]
-    public function forgetPassword(Request $request): Response
+    #[Route(path: "/mot-de-passe-oublié", name: "app.forget_password")]
+    public function forgetPassword(Request $request, UserRepository $userRepo): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute("app.home");
@@ -110,8 +111,11 @@ class UserController extends AbstractController
         $form = $this->createForm(ForgetPasswordType::class, $user);
 
         $form->handleRequest($request);
-
+// dump($form->isSubmitted() ? "oui" : "non", $form->isValid() ? "oui": "non");
         if ($form->isSubmitted() && $form->isValid()) {
+            // $user = $userRepo->findBy(["user" => $user]);
+            $user = $userRepo->findOneBy(["email" => $form->get("email")->getData()]);
+            \dd($user);
         }
 
         return $this->render("user/forgetPassword.html.twig", [
