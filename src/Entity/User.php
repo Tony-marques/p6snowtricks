@@ -10,6 +10,7 @@ use App\Trait\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Validation;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -24,10 +25,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email(
-        message: "L'email {{ value }} n'est pas un email valide"
+        message: "L'email {{ value }} n'est pas un email valide",
+        groups: ["user_register"]
     )]
     #[Assert\NotBlank(
-        message: "Merci de renseigner un email"
+        message: "Merci de renseigner un email",
+        groups: ["user_register"]
     )]
     private ?string $email = null;
 
@@ -39,11 +42,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\NotBlank(
-        message: "Merci de renseigner un mot de passe"
+        message: "Merci de renseigner un mot de passe",
+        groups: ["user_register", "reset_password"]
     )]
     #[Assert\Regex(
         pattern: '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).+$/',
-        message: "Le mot de passe doit contenir au moins un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial."
+        message: "Le mot de passe doit contenir au moins un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial.",
+        groups: ["user_register", "reset_password"]
     )]
     private ?string $password = null;
 
@@ -53,22 +58,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 255,
         minMessage: "Le pseudo doit contenir au minimum 4 caractères",
         maxMessage: "Le pseudo doit contenir au maximum 255 caractères",
+        groups: ["user_register"]
     )]
     #[Assert\NotBlank(
-        message: "Merci de renseigner un pseudo"
+        message: "Merci de renseigner un pseudo",
+        groups: ["user_register"]
     )]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 255)]
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(
+        groups: ["user_edit"]
+    )]
     private ?string $profileImage = null;
 
-    #[Assert\LessThan(100, message: "Votre âge doit être inférieur à 100")]
-    #[Assert\GreaterThan(17, message: "Votre âge doit être supérieur à 0")]
+    #[Assert\LessThan(
+        100,
+        message: "Votre âge doit être inférieur à 100",
+        groups: ["user_edit"]
+    )]
+    #[Assert\GreaterThan(
+        17,
+        message: "Votre âge doit être supérieur à 0",
+        groups: ["user_edit"]
+    )]
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
+
+    #[ORM\Column(nullable: true)]
+    public ?string $resetToken = null;
+
+    private ?\DateTimeImmutable $tokenExpiration = null;
 
     public function __construct()
     {
@@ -202,7 +226,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Get the value of profileImage
-     */ 
+     */
     public function getProfileImage()
     {
         return $this->profileImage;
@@ -212,10 +236,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Set the value of profileImage
      *
      * @return  self
-     */ 
+     */
     public function setProfileImage($profileImage)
     {
         $this->profileImage = $profileImage;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of resetToken
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * Set the value of resetToken
+     *
+     * @return  self
+     */
+    public function setResetToken($resetToken)
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tokenExpiration
+     */
+    public function getTokenExpiration()
+    {
+        return $this->tokenExpiration;
+    }
+
+    /**
+     * Set the value of tokenExpiration
+     *
+     * @return  self
+     */
+    public function setTokenExpiration($tokenExpiration)
+    {
+        $this->tokenExpiration = $tokenExpiration;
 
         return $this;
     }
