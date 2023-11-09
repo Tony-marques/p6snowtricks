@@ -3,20 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\EditUserAdminType;
-use App\Form\ShowUserType;
-use App\Form\ForgetPasswordType;
 use DateTimeImmutable;
 use App\Form\RegisterType;
+use App\Form\ShowUserType;
+use App\Form\EditUserAdminType;
+use App\Form\ForgetPasswordType;
+use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mime\Email;
 
 class UserController extends AbstractController
 {
@@ -101,7 +105,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: "/mot-de-passe-oublié", name: "app.forget_password")]
-    public function forgetPassword(Request $request, UserRepository $userRepo): Response
+    public function forgetPassword(Request $request, UserRepository $userRepo, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute("app.home");
@@ -111,16 +115,62 @@ class UserController extends AbstractController
         $form = $this->createForm(ForgetPasswordType::class, $user);
 
         $form->handleRequest($request);
-// dump($form->isSubmitted() ? "oui" : "non", $form->isValid() ? "oui": "non");
+        // dump($form->isSubmitted() ? "oui" : "non", $form->isValid() ? "oui": "non");
         if ($form->isSubmitted() && $form->isValid()) {
             // $user = $userRepo->findBy(["user" => $user]);
+            $token = bin2hex(random_bytes(32));
+
             $user = $userRepo->findOneBy(["email" => $form->get("email")->getData()]);
-            \dd($user);
+            $user->setResetToken($token);
+            $user->setTokenExpiration(new \DateTimeImmutable('+1 hour'));
+
+            $em->persist($user);
+            $em->flush();
+
+            $resetLink = $this->generateUrl('app.reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $email = (new Email())
+                ->from('noreply@example.com')
+                ->to($user->getEmail())
+                ->subject('Réinitialisation de mot de passe')
+                ->html('Cliquez sur le lien suivant pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">Réinitialiser le mot de passe</a>');
+
+            // \dd($email);
+
+            $mailer->send($email);
         }
 
         return $this->render("user/forgetPassword.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    #[Route(path: "/mot-de-passe-oublié/{token}", name: "app.reset_password")]
+    public function resetPassword(string $token, Request $request, UserRepository $userRepo, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $user = $userRepo->findOneBy(["resetToken" => $token]);
+
+        if ($user) {
+            $form = $this->createForm(ResetPasswordType::class);
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $user->setResetToken("")
+                    ->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()));
+
+                $em->persist($user);
+                $em->flush();
+
+                return $this->redirectToRoute("app.login");
+            }
+
+            return $this->render("user/resetPassword.html.twig", [
+                "form" => $form->createView()
+            ]);
+        }
+
+        return $this->redirectToRoute("app.forget_password");
     }
 
     #[Route(path: "/profil/{id}", name: "app.show_profile")]
