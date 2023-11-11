@@ -27,19 +27,20 @@ class TrickType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name"
             ])
-            ->add("mainImage", FileType::class, [
+            ->add("mainImage", ImageType::class, [
+                "required" => false,
                 "label" => false,
-                "constraints" => [
-                    new File([
-                        "mimeTypes" => [
-                            'image/webp',
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif'
-                        ],
-                        'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté',
-                    ])
-                ]
+                // "constraints" => [
+                //     new File([
+                //         "mimeTypes" => [
+                //             'image/webp',
+                //             'image/jpeg',
+                //             'image/png',
+                //             'image/gif'
+                //         ],
+                //         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté',
+                //     ])
+                // ]
             ])
             ->add("images", CollectionType::class, [
                 "entry_type" => ImageType::class,

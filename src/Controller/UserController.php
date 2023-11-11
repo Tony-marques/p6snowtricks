@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use App\Form\RegisterType;
 use App\Form\ShowUserType;
 use App\Form\EditUserAdminType;
+use App\Form\EditUserType;
 use App\Form\ForgetPasswordType;
 use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
@@ -184,20 +185,21 @@ class UserController extends AbstractController
     #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
     public function editProfile(Request $request, User $user, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(ShowUserType::class, $user);
+        $form = $this->createForm(EditUserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('profileImage')->getData();
+            $imageFile = $user->getProfileImageFile();
             $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            // \dd($nameImage);
             $imageFile->move("upload/profile", $nameImage);
 
             $user->setProfileImage($nameImage);
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute("app.show_profile");
+            return $this->redirectToRoute("app.show_profile", ["id" => $user->getId()]);
         }
 
         return $this->render("user/edit_profile.html.twig", [

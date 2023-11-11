@@ -31,7 +31,7 @@ class ImageType extends AbstractType
                         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté',
                     ])
                 ]
-            ]);
+                    ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
