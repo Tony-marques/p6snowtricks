@@ -8,9 +8,9 @@
 		{% endif %}
 		{{ form_start(form, {attr: {class: "w-[500px]"}}) }}
 		<div class="mb-6">
-			{{ form_label(form.profileImage, "Image de profil", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.profileImage, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-			{{ form_errors(form.profileImage) }}
+			{{ form_label(form.profileImageFile, "Image de profil", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
+			{{ form_widget(form.profileImageFile, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.profileImageFile) }}
 		</div>
 		<div class="mb-6">
 			{{ form_label(form.pseudo, "Pseudo", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use App\Trait\TimestampableTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -73,6 +74,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $profileImage = null;
 
+    private UploadedFile $profileImageFile;
+
     #[Assert\LessThan(
         100,
         message: "Votre âge doit être inférieur à 100",
@@ -91,8 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     public ?string $resetToken = null;
-
-    private ?\DateTimeImmutable $tokenExpiration = null;
 
     public function __construct()
     {
@@ -265,21 +266,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Get the value of tokenExpiration
-     */
-    public function getTokenExpiration()
+     * Get the value of profileImageFile
+     */ 
+    public function getProfileImageFile()
     {
-        return $this->tokenExpiration;
+        return $this->profileImageFile;
     }
 
     /**
-     * Set the value of tokenExpiration
+     * Set the value of profileImageFile
      *
      * @return  self
-     */
-    public function setTokenExpiration($tokenExpiration)
+     */ 
+    public function setProfileImageFile($profileImageFile)
     {
-        $this->tokenExpiration = $tokenExpiration;
+        $this->profileImageFile = $profileImageFile;
 
         return $this;
     }

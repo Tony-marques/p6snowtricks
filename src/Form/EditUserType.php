@@ -16,7 +16,7 @@ class EditUserType extends AbstractType
     $builder
       ->add('pseudo')
       ->add("age")
-      ->add("profileImage", FileType::class);
+      ->add("profileImageFile", FileType::class);
   }
 
   public function configureOptions(OptionsResolver $resolver): void

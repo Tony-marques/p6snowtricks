@@ -5,10 +5,7 @@ console.log("test");
 btn.addEventListener("click", (e) => {
     const slug = e.target.dataset.slug;
     const confirmation = confirm(`Voulez vous vraiment supprimer le trick ${slug}`)
-    const donnees = {
-        cle1: 'valeur1',
-        cle2: 'valeur2',
-    };
+
     if (confirmation) {
         fetch(`/tricks/supprimer/${slug}`, {
             method: "POST",

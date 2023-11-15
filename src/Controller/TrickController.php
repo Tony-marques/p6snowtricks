@@ -31,33 +31,39 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         $userRole = $this->getUser()->getRoles();
-
+// \dd($trick);
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('mainImage')->getData();
-            // \dd(\get_class($imageFile));
-            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            $imageFile->move("upload/tricks", $nameImage);
 
-            foreach ($trick->getImages() as $image) {
+            $imageFile = $trick->getMainImage();
+            $nameImage = md5(uniqid()) . '.' . $imageFile->getFile()->guessExtension();
+            $imageFile->getFile()->move("upload/tricks", $nameImage);
 
-                $file = $image->getFile();
-                $name = md5(uniqid()) . '.' . $file->guessExtension();
+            $imageFile->setName($nameImage);
+            $imageFile->setCreatedAt(new DateTimeImmutable());
+            $imageFile->setTrick($trick);
+            $trick->addImage($imageFile);
+            // \dd($imageFile);
 
-                $file->move(
-                    "upload/tricks",
-                    $name
-                );
+            // foreach ($trick->getImages() as $image) {
 
-                $image->setName($name);
-                $image->setCreatedAt(new DateTimeImmutable());
-                $image->setTrick($trick);
-                $trick->addImage($image);
-            }
+            //     $file = $image->getFile();
+            //     $name = md5(uniqid()) . '.' . $file->guessExtension();
+
+            //     $file->move(
+            //         "upload/tricks",
+            //         $name
+            //     );
+
+            //     $image->setName($name);
+            //     $image->setCreatedAt(new DateTimeImmutable());
+            //     $image->setTrick($trick);
+            //     $trick->addImage($image);
+            // }
 
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
                 ->setSlug($slugger->slug($trick->getName())->lower())
-                ->setMainImage($nameImage);
+                ->setMainImage($imageFile);
 
             $em->persist($trick);
 
@@ -93,13 +99,26 @@ class TrickController extends AbstractController
 
         $em->remove($trick);
         $em->flush();
-        if ($request->getMethod() === "POST") {
-            $this->addFlash("success", "Le trick {$trick->getName()} a été supprimé avec succès !");
+
+        if (\file_exists("upload/tricks/{$trick->getMainImage()}")) {
+            \unlink("upload/tricks/{$trick->getMainImage()}");
         }
 
-        return $this->json([
-            "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
-        ]);
+        foreach ($trick->getImages() as $image) {
+            if (\file_exists("upload/tricks/{$image->getName()}")) {
+                \unlink("upload/tricks/{$image->getName()}");
+            }
+        }
+
+        return $this->redirectToRoute("app.home");
+
+        // if ($request->getMethod() === "POST") {
+        //     $this->addFlash("success", "Le trick {$trick->getName()} a été supprimé avec succès !");
+        // }
+
+        // return $this->json([
+        //     "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
+        // ]);
     }
 
     #[IsGranted("ROLE_USER")]
@@ -119,9 +138,39 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setSlug($slugger->slug($trick->getName())->lower())
-                ->setUpdatedAt(new DateTimeImmutable());
+
+            if (\file_exists("upload/tricks/{$trick->getMainImage()}")) {
+                \unlink("upload/tricks/{$trick->getMainImage()}");
+            }
+
+            $imageFile = $form->get('mainImageFile')->getData();
+            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move("upload/tricks", $nameImage);
+
+            foreach ($trick->getImages() as $image) {
+                if (\file_exists("upload/tricks/{$image->getName()}")) {
+                    \unlink("upload/tricks/{$image->getName()}");
+                }
+
+                $file = $image->getFile();
+                $name = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move(
+                    "upload/tricks",
+                    $name
+                );
+
+                $image->setName($name);
+                $image->setCreatedAt(new DateTimeImmutable());
+                $image->setTrick($trick);
+                $trick->addImage($image);
+                // \dd($image->getName());
+            }
+
+            $trick->setMainImage($nameImage);
+
             $em->persist($trick);
+
             $em->flush();
 
             return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);

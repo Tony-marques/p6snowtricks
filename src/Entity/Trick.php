@@ -9,6 +9,7 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -47,8 +48,11 @@ class Trick
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
-    private $mainImage = null;
+    #[ORM\OneToOne(targetEntity: Image::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Image $mainImage = null;
+
+    // private $mainImageFile;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
@@ -210,4 +214,24 @@ class Trick
 
         return $this;
     }
+
+    // /**
+    //  * Get the value of mainImageFile
+    //  */ 
+    // public function getMainImageFile()
+    // {
+    //     return $this->mainImageFile;
+    // }
+
+    // /**
+    //  * Set the value of mainImageFile
+    //  *
+    //  * @return  self
+    //  */ 
+    // public function setMainImageFile($mainImageFile)
+    // {
+    //     $this->mainImageFile = $mainImageFile;
+
+    //     return $this;
+    // }
 }
