@@ -58,6 +58,7 @@ class TrickController extends AbstractController
             //     $image->setCreatedAt(new DateTimeImmutable());
             //     $image->setTrick($trick);
             //     $trick->addImage($image);
+
             // }
 
             $trick->setCreatedAt(new DateTimeImmutable())
@@ -100,8 +101,10 @@ class TrickController extends AbstractController
         $em->remove($trick);
         $em->flush();
 
-        if (\file_exists("upload/tricks/{$trick->getMainImage()}")) {
-            \unlink("upload/tricks/{$trick->getMainImage()}");
+        // \dd($trick->getMainImage()->getName());
+
+        if (\file_exists("upload/tricks/{$trick->getMainImage()->getName()}")) {
+            \unlink("upload/tricks/{$trick->getMainImage()->getName()}");
         }
 
         foreach ($trick->getImages() as $image) {
@@ -138,14 +141,13 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            if (\file_exists("upload/tricks/{$trick->getMainImage()}")) {
-                \unlink("upload/tricks/{$trick->getMainImage()}");
+            if (\file_exists("upload/tricks/{$trick->getMainImage()->getName()}")) {
+                \unlink("upload/tricks/{$trick->getMainImage()->getName()}");
             }
 
-            $imageFile = $form->get('mainImageFile')->getData();
-            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            $imageFile->move("upload/tricks", $nameImage);
+            $imageFile = $form->get('mainImage')->getData();
+            $nameImage = md5(uniqid()) . '.' . $imageFile->getFile()->guessExtension();
+            $imageFile->getFile()->move("upload/tricks", $nameImage);
 
             foreach ($trick->getImages() as $image) {
                 if (\file_exists("upload/tricks/{$image->getName()}")) {
@@ -153,6 +155,8 @@ class TrickController extends AbstractController
                 }
 
                 $file = $image->getFile();
+                \dd($file->guessExtension());
+
                 $name = md5(uniqid()) . '.' . $file->guessExtension();
 
                 $file->move(

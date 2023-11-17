@@ -24,7 +24,7 @@
 
 				</div>
 			{% endif %}
-			<img src="{{ asset("upload/tricks/" ~ trick.mainImage.name) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.name}}">
+			<img src="{{ asset("upload/tricks/" ~ trick.mainImage.name) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.mainImage.name}}">
 			<div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
 
 				{% for image in trick.images %}
@@ -36,11 +36,11 @@
 			</div>
 			<div class="informations flex mt-6 gap-2">
 				<div class="bg-white rounded-lg p-2 text-black">Date
-																									                    création:
+																														                    création:
 					{{ trick.createdAt|date("d/m/Y à H:i:s") }}</div>
 				{% if trick.updatedAt %}
 					<div class="bg-white rounded-lg p-2 text-black">Date
-																														                        Modification:
+																																				                        Modification:
 						{{ trick.updatedAt|date("d/m/Y à H:i:s") }}</div>
 				{% endif %}
 				<div class="bg-white rounded-lg p-2 text-black">Catégorie:
@@ -65,14 +65,14 @@
 
 				{% for comment in comments %}
 					<div class="comment flex gap-4 items-center">
-					{% if app.user.profileImage %}
-						<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}" class="w-10 h-10 rounded-full object-cover" alt="Photo de profil de {{app.user.pseudo}}">
+						{% if app.user.profileImage %}
+							<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}" class="w-10 h-10 rounded-full object-cover" alt="Photo de profil de {{app.user.pseudo}}">
 
-					{% else %}
-						<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="Photo de profil par défault">
-						
-					{% endif %}
-					
+						{% else %}
+							<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="Photo de profil par défault">
+
+						{% endif %}
+
 						<div class="p-2 bg-white rounded text-gray-700 w-[500px] h-[88px]">{{ comment.content }}
 						</div>
 					</div>

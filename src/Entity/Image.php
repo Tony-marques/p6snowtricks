@@ -20,7 +20,7 @@ class Image
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    private $file;
+    private UploadedFile $file;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: true)]

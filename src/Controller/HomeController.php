@@ -2,19 +2,28 @@
 
 namespace App\Controller;
 
+use App\Helpers\Paginator;
 use App\Repository\TrickRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app.home')]
-    public function index(TrickRepository $trickRepository): Response
+    public function index(TrickRepository $trickRepository, Request $request, Paginator $paginator): Response
     {
+        $tricks = $trickRepository->findBy([], ["createdAt" => "DESC"]);
+
+        $currentPage = $request->get("page") ?? "1";
+
+        [$tricksForOnePage, $totalPages] = $paginator->paginate(items: $tricks, currentPage: $currentPage, limit: 6);
+
         return $this->render('home/index.html.twig', [
-            "tricks" => $trickRepository->findBy([], ["createdAt" => "DESC"])
+            "tricks" => $tricksForOnePage,
+            "totalPages" => $totalPages,
+            "currentPage" => $currentPage
         ]);
     }
-
 }
