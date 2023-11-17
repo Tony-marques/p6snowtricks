@@ -31,7 +31,7 @@
 					{% set trickname = trick.name %}
 				{% endif %}
 				<div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
-					<figure><img src="{{ asset("upload/tricks/" ~ trick.mainImage) }}" class="h-[200px] object-cover" alt="trick {{trick.name}}" class="w-full"/>
+					<figure><img src="{{ asset("upload/tricks/" ~ trick.mainImage.name) }}" class="h-[200px] object-cover" alt="trick {{trick.name}}" class="w-full"/>
 					</figure>
 					<div class="card-body p-4 flex flex-row justify-between items-center">
 						<a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}" class="card-title hover:text-white">{{ trickname }}</a>
@@ -50,8 +50,16 @@
 				</div>
 			{% endfor %}
 
-
+			
 		</div>
+		<div class="pagination">
+				{% if totalPages > 1 %}
+					{% for page in 1..totalPages %}
+						{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
+						<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.home", {"page": page}) }}">{{ page }}</a>
+					{% endfor %}
+				{% endif %}
+			</div>
 		{% if tricks|length > 10 %}
 			<button class="btn">Charger plus</button>
 		{% endif %}
