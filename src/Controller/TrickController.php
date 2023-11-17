@@ -31,35 +31,35 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         $userRole = $this->getUser()->getRoles();
-// \dd($trick);
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('mainImage')->getData();
+            // \dd($imageFile->guessExtension());
 
-            $imageFile = $trick->getMainImage();
-            $nameImage = md5(uniqid()) . '.' . $imageFile->getFile()->guessExtension();
-            $imageFile->getFile()->move("upload/tricks", $nameImage);
+            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
 
-            $imageFile->setName($nameImage);
-            $imageFile->setCreatedAt(new DateTimeImmutable());
-            $imageFile->setTrick($trick);
-            $trick->addImage($imageFile);
-            // \dd($imageFile);
+            $imageFile->move("upload/tricks", $nameImage);
 
-            // foreach ($trick->getImages() as $image) {
+            $trick->setMainImageName($nameImage);
+            // $imageFile->setCreatedAt(new DateTimeImmutable());
+            // $imageFile->setTrick($trick);
+            // $trick->addImage($imageFile);
 
-            //     $file = $image->getFile();
-            //     $name = md5(uniqid()) . '.' . $file->guessExtension();
+            foreach ($trick->getImages() as $image) {
+                // \dd($image);
+                $file = $image->getFile();
+                $name = md5(uniqid()) . '.' . $file->guessExtension();
+                
+                $file->move(
+                    "upload/tricks",
+                    $name
+                );
 
-            //     $file->move(
-            //         "upload/tricks",
-            //         $name
-            //     );
-
-            //     $image->setName($name);
-            //     $image->setCreatedAt(new DateTimeImmutable());
-            //     $image->setTrick($trick);
-            //     $trick->addImage($image);
-
-            // }
+                $image->setName($name);
+                $image->setCreatedAt(new DateTimeImmutable());
+                $image->setTrick($trick);
+                $trick->addImage($image);
+            }
 
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
@@ -101,10 +101,10 @@ class TrickController extends AbstractController
         $em->remove($trick);
         $em->flush();
 
-        // \dd($trick->getMainImage()->getName());
+        \dd($trick->getMainImageName());
 
-        if (\file_exists("upload/tricks/{$trick->getMainImage()->getName()}")) {
-            \unlink("upload/tricks/{$trick->getMainImage()->getName()}");
+        if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
+            \unlink("upload/tricks/{$trick->getMainImageName()}");
         }
 
         foreach ($trick->getImages() as $image) {
@@ -141,13 +141,13 @@ class TrickController extends AbstractController
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (\file_exists("upload/tricks/{$trick->getMainImage()->getName()}")) {
-                \unlink("upload/tricks/{$trick->getMainImage()->getName()}");
+            if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
+                \unlink("upload/tricks/{$trick->getMainImageName()}");
             }
 
             $imageFile = $form->get('mainImage')->getData();
-            $nameImage = md5(uniqid()) . '.' . $imageFile->getFile()->guessExtension();
-            $imageFile->getFile()->move("upload/tricks", $nameImage);
+            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move("upload/tricks", $nameImage);
 
             foreach ($trick->getImages() as $image) {
                 if (\file_exists("upload/tricks/{$image->getName()}")) {
@@ -155,7 +155,7 @@ class TrickController extends AbstractController
                 }
 
                 $file = $image->getFile();
-                \dd($file->guessExtension());
+                // \dd($file->guessExtension());
 
                 $name = md5(uniqid()) . '.' . $file->guessExtension();
 
@@ -171,7 +171,7 @@ class TrickController extends AbstractController
                 // \dd($image->getName());
             }
 
-            $trick->setMainImage($nameImage);
+            $trick->setMainImageName($nameImage);
 
             $em->persist($trick);
 

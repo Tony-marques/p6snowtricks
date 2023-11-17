@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app.home')]
     public function index(TrickRepository $trickRepository, Request $request, Paginator $paginator): Response
     {
-        $tricks = $trickRepository->findBy([], ["createdAt" => "DESC"]);
+        $tricks = $trickRepository->findBy([], ["createdAt" => "ASC"]);
 
         $currentPage = $request->get("page") ?? "1";
 

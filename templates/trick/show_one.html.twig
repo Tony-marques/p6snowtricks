@@ -24,7 +24,7 @@
 
 				</div>
 			{% endif %}
-			<img src="{{ asset("upload/tricks/" ~ trick.mainImage.name) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.mainImage.name}}">
+			<img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.mainImageName}}">
 			<div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
 
 				{% for image in trick.images %}
