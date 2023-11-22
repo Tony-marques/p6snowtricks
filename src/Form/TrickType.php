@@ -27,7 +27,7 @@ class TrickType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name"
             ])
-            ->add("mainImage", ImageType::class, [
+            ->add("mainImage", FileType::class, [
                 "required" => false,
                 "label" => false,
                 // "constraints" => [

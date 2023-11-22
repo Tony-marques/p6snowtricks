@@ -17,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Trick
 {
     use TimestampableTrait;
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -48,11 +48,13 @@ class Trick
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\OneToOne(targetEntity: Image::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Image $mainImage = null;
+    // #[ORM\OneToOne(targetEntity: Image::class)]
+    // #[ORM\JoinColumn(nullable: true)]
+    private ?UploadedFile $mainImage = null;
 
     // private $mainImageFile;
+    #[ORM\Column()]
+    private $mainImageName = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
@@ -99,7 +101,7 @@ class Trick
         return $this;
     }
 
-      public function getUser(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -197,7 +199,7 @@ class Trick
 
     /**
      * Get the value of mainImage
-     */ 
+     */
     public function getMainImage()
     {
         return $this->mainImage;
@@ -207,7 +209,7 @@ class Trick
      * Set the value of mainImage
      *
      * @return  self
-     */ 
+     */
     public function setMainImage($mainImage)
     {
         $this->mainImage = $mainImage;
@@ -234,4 +236,24 @@ class Trick
 
     //     return $this;
     // }
+
+    /**
+     * Get the value of mainImageName
+     */
+    public function getMainImageName()
+    {
+        return $this->mainImageName;
+    }
+
+    /**
+     * Set the value of mainImageName
+     *
+     * @return  self
+     */
+    public function setMainImageName($mainImageName)
+    {
+        $this->mainImageName = $mainImageName;
+
+        return $this;
+    }
 }
