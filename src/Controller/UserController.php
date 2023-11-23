@@ -40,6 +40,8 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            $this->addFlash("success", "Compte créer avec succès !");
+
             return $this->redirectToRoute("app.login");
         }
 
@@ -123,7 +125,6 @@ class UserController extends AbstractController
 
             $user = $userRepo->findOneBy(["email" => $form->get("email")->getData()]);
             $user->setResetToken($token);
-            $user->setTokenExpiration(new \DateTimeImmutable('+1 hour'));
 
             $em->persist($user);
             $em->flush();
