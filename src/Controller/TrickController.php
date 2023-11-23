@@ -58,6 +58,10 @@ class TrickController extends AbstractController
                 $trick->addImage($image);
             }
 
+            foreach ($trick->getVideos() as $video) {
+                $video->setTrick($trick);
+            }
+
             $trick->setCreatedAt(new DateTimeImmutable())
                 ->setUser($this->getUser())
                 ->setSlug($slugger->slug($trick->getName())->lower())
@@ -166,7 +170,7 @@ class TrickController extends AbstractController
                 // \dd($image->getName());
             }
 
-            $trick->setMainImageName($nameImage);
+            $trick->setMainImageName($nameImage)->setUpdatedAt(new DateTimeImmutable());
 
             $em->persist($trick);
 
