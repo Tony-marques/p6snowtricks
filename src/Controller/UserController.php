@@ -76,11 +76,11 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[IsGranted("ROLE_USER")]
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(path: "/utilisateurs/edition/{id}", name: "app.users_update")]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
     {
-        //        Créer la logique un utilisateur peut modifier uniquement son profil (les voters)
+
         $form = $this->createForm(EditUserAdminType::class, $user);
         $form->handleRequest($request);
 
@@ -88,6 +88,8 @@ class UserController extends AbstractController
             $user->setUpdatedAt(new DateTimeImmutable());
             $em->persist($user);
             $em->flush();
+
+            $this->addFlash("update", "L'utilisateur {$user->getEmail()} a été modifié avec succès !");
 
             return $this->redirectToRoute("app.users");
         }
@@ -104,6 +106,8 @@ class UserController extends AbstractController
         $em->remove($user);
         $em->flush();
 
+        $this->addFlash("delete", "L'utilsateur {$user->getEmail()} a été supprimé avec succès !");
+
         return $this->redirectToRoute("app.users");
     }
 
@@ -118,9 +122,8 @@ class UserController extends AbstractController
         $form = $this->createForm(ForgetPasswordType::class, $user);
 
         $form->handleRequest($request);
-        // dump($form->isSubmitted() ? "oui" : "non", $form->isValid() ? "oui": "non");
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            // $user = $userRepo->findBy(["user" => $user]);
             $token = bin2hex(random_bytes(32));
 
             $user = $userRepo->findOneBy(["email" => $form->get("email")->getData()]);
@@ -136,8 +139,6 @@ class UserController extends AbstractController
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de mot de passe')
                 ->html('Cliquez sur le lien suivant pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">Réinitialiser le mot de passe</a>');
-
-            // \dd($email);
 
             $mailer->send($email);
         }
@@ -186,6 +187,7 @@ class UserController extends AbstractController
     #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
     public function editProfile(Request $request, User $user, EntityManagerInterface $em): Response
     {
+        // Créer le voter, peut modifier uniquement son propre profil
         $form = $this->createForm(EditUserType::class, $user);
 
         $form->handleRequest($request);
@@ -193,7 +195,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $user->getProfileImageFile();
             $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            // \dd($nameImage);
+
             $imageFile->move("upload/profile", $nameImage);
 
             $user->setProfileImage($nameImage);

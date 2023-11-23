@@ -16,24 +16,8 @@ btn.addEventListener("click", (e) => {
             location.href = "/"
 
         }).catch(err => {
-            createToast("ce trick n'existe pas", "error")
+            
         })
     }
 })
 
-function createToast(message, type) {
-    let div = document.createElement("div")
-
-    div.style.top = `${scrollY + 7}px`
-    div.classList.add("absolute", "left-2")
-    div.innerHTML = `
-        <div id="message" class="alert alert-${type} w-max cursor-pointer">
-            <span>${message}</ span>
-        </div>`
-
-    return div
-}
-
-function deleteToast(toast) {
-    toast.remove();
-}

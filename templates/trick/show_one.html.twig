@@ -13,15 +13,28 @@
 {% block body %}
 	<div class="trick-container flex flex-col items-center bg-gray-100">
 		{% for flash in app.flashes("success") %}
-			<p class="alert alert-success alert-sm w-max mt-5">{{flash}}</p>
+			<div id="alert-border-3" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
+				<svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 20 20">
+					<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+				</svg>
+				<div class="ms-3 text-sm font-medium">
+					{{flash}}
+				</div>
+				<button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-border-3" aria-label="Close">
+					<span class="sr-only">Dismiss</span>
+					<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 14 14">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+					</svg>
+				</button>
+			</div>
 		{% endfor %}
 		<div class="trick w-7/12 flex flex-col items-center my-10 border rounded-lg relative overflow-hidden bg-white text-sm pb-6">
-			{% if is_granted("ROLE_ADMIN") %}
+			{% if is_granted("ROLE_ADMIN") or app.user == trick.user %}
 				<div class="card-actions justify-end mt-1 absolute top-1 right-3">
-					<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
+					<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-2.5 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
 						<i class="fa-solid fa-pencil"></i>
 					</a>
-					<button title="Supprimer le trick" data-slug="{{ trick.slug }}" class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+					<button title="Supprimer le trick" data-slug="{{ trick.slug }}" class="delete  focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2.5 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
 						<i class="fa-solid fa-trash-can pointer-events-none"></i>
 					</button>
 

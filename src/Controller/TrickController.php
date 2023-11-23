@@ -104,7 +104,6 @@ class TrickController extends AbstractController
         $em->remove($trick);
         $em->flush();
 
-        // \dd($trick->getMainImageName());
 
         if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
             \unlink("upload/tricks/{$trick->getMainImageName()}");
@@ -115,8 +114,6 @@ class TrickController extends AbstractController
                 \unlink("upload/tricks/{$image->getName()}");
             }
         }
-
-        // return $this->redirectToRoute("app.home");
 
         return $this->json([
             "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",

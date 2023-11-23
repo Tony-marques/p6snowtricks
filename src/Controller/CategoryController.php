@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[IsGranted("ROLE_ADMIN")]
 #[Route(path: "/categories", name: "categories_")]
 class CategoryController extends AbstractController
 {
@@ -46,6 +48,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    
     #[Route(path: "/", name: "manage")]
     public function manageCategory(): Response
     {
@@ -54,6 +57,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    
     #[Route(path: "/edition/{slug}", name: "edit")]
     public function editCategory(Category $category, Request $request, SluggerInterface $slugger): Response
     {
@@ -80,11 +84,14 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    
     #[Route(path: "/supprimer/{slug}", name: "delete")]
     public function delete(Category $category)
     {
         $this->em->remove($category);
         $this->em->flush();
+
+        $this->addFlash("delete", "La catégorie {$category->getName()} a été supprimée avec succès !");
 
         return $this->redirectToRoute("categories_manage");
     }

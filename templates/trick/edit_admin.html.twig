@@ -8,36 +8,52 @@
 {% block body %}
 
 	<div class="tricks-create-container flex items-center justify-center flex-1">
-		{{ form_start(form, {attr: {class: "w-[700px]"}}) }}
+		{{ form_start(form, {attr: {class: "w-[800px] bg-white p-5 rounded-xl"}}) }}
 		<div class="mb-6">
-			{{ form_label(form.name, "Titre", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.name, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_label(form.name, "Titre", {"label_attr": {"class": "block mb-2 text-sm font-medium text-gray-600 dark:text-white"}}) }}
+			{{ form_widget(form.name, {"attr": {"class": "bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"}}) }}
 			{{ form_errors(form.name) }}
 		</div>
 		<div class="mb-6">
-			{{ form_label(form.mainImage, "Image principale", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.mainImage, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_label(form.mainImage, "Image principale", {"label_attr": {"class": "block mb-2 text-sm font-medium text-gray-600"}}) }}
+			{{ form_widget(form.mainImage, {"attr": {"class": "bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"}}) }}
 			{{ form_errors(form.mainImage) }}
 		</div>
 		<div class="mb-6">
-			{{ form_label(form.category, "Catégorie", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.category, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_label(form.category, "Catégorie", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium"}}) }}
+			{{ form_widget(form.category, {"attr": {"class": "text-gray-600 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"}}) }}
 			{{ form_errors(form.category) }}
 		</div>
-		<div class="mb-6">
-			{{ form_label(form.images, "Médias", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.images, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-			{{ form_errors(form.images) }}
-		</div>
-<div class="images flex justify-center gap-2">
-		{% for image in trick.images %}
-			<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
-		{% endfor %}
-</div>
+		{% if trick.images|length > 0 %}
+			<div class="mb-6">
+				{{ form_label(form.images, "Images", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium "}}) }}
+				{{ form_widget(form.images, {"attr": {"class": "bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+				{{ form_errors(form.images) }}
+			</div>
+			<div class="images flex justify-center gap-2">
+				{% for image in trick.images %}
+					<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
+				{% endfor %}
+			</div>
+		{% endif %}
+
+		{% if trick.videos|length > 0 %}
+			<div class="mb-6">
+				{{ form_label(form.videos, "Vidéos", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium "}}) }}
+				{{ form_widget(form.videos, {"attr": {"class": "white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full "}}) }}
+				{{ form_errors(form.videos) }}
+			</div>
+			{# <div class="images flex justify-center gap-2">
+				{% for image in trick.videos %}
+					<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Product Image" class="w-[22%] h-36 object-cover rounded-lg">
+				{% endfor %}
+			</div> #}
+		{% endif %}
+
 
 		<div class="mb-6">
-			{{ form_label(form.description, "Description", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-			{{ form_widget(form.description, {"attr": {"class": "h-[250px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_label(form.description, "Description", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium "}}) }}
+			{{ form_widget(form.description, {"attr": {"class": "h-[250px] bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
 			{{ form_errors(form.description) }}
 		</div>
 

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}
    Edition Catégorie {{ category.name }}
@@ -7,11 +7,11 @@
 {% block body %}
 
     <div class="tricks-create-container flex items-center justify-center flex-1 flex-col">
-    <p class="w-[700px] mb-4">Editer une catégorie</p>
-        {{ form_start(form, {attr: {class: "w-[700px]"}}) }}
+    <p class="w-[800px] mb-4 text-gray-600 text-center">{{"Editer une catégorie"|upper}}</p>
+        {{ form_start(form, {attr: {class: "w-[800px] bg-white p-5 rounded-xl"}}) }}
         <div class="mb-6">
-            {{ form_label(form.name, "Titre", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-            {{ form_widget(form.name, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+            {{ form_label(form.name, "Titre", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium "}}) }}
+            {{ form_widget(form.name, {"attr": {"class": "bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
             {{ form_errors(form.name) }}
         </div>
 

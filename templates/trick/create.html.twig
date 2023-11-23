@@ -1,42 +1,63 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Création trick
+	Création trick
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('imagesTrick') }}
 {% endblock %}
 
 {% block body %}
 
-    <div class="tricks-create-container flex items-center justify-center flex-1">
-        {{ form_start(form, {attr: {class: "w-[700px]"}}) }}
-        <div class="mb-6">
-            {{ form_label(form.name, "Titre", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-            {{ form_widget(form.name, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-            {{ form_errors(form.name) }}
-        </div>
-        <div class="mb-6">
-            {{ form_label(form.category, "Catégorie", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-            {{ form_widget(form.category, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-            {{ form_errors(form.category) }}
-        </div>
-        <div class="mb-6">
-            {{ form_label(form.images, "Médias", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-            {{ form_widget(form.images, {"attr": {"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-            {{ form_errors(form.images) }}
-        </div>
-        <div class="mb-6">
-            {{ form_label(form.description, "Description", {"label_attr": {"class": "block mb-2 text-sm font-medium text-white dark:text-white"}}) }}
-            {{ form_widget(form.description, {"attr": {"class": "h-[250px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
-            {{ form_errors(form.description) }}
-        </div>
+	<div class="tricks-create-container flex items-center justify-center flex-1 my-5">
+		{{ form_start(form, {attr: {class: "w-[800px] bg-white p-5 border border-gray-200 rounded-lg"}}) }}
+		<div class="mb-5">
+			{{ form_label(form.name, "Titre", {"label_attr": {"class": "text-gray-600"}}) }}
+			{{ form_widget(form.name, {"attr": {"class": "bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 "}}) }}
+			{{ form_errors(form.name) }}
+		</div>
+		<div class="mb-5">
+			{{ form_label(form.category, "Catégorie", {"label_attr": {"class": "text-gray-600"}}) }}
+			{{ form_widget(form.category, {"attr": {"class": "bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.category) }}
+		</div>
+		<div class="mb-5">
+			{{ form_label(form.mainImage, "Image principale", {"label_attr": {"class": "text-gray-600"}, "attr": {"class": "custom-file-button"}}) }}
+			{{ form_widget(form.mainImage, {"attr": {"class": " bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.mainImage) }}
+		</div>
+		<div class="col pt-2 d-flex flex-column" id="newTrickImages">
+			<button type="button" id="add-image" class="add_item_link text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" data-collection-holder-class="images">Ajouter une image</button>
+			<ul class="images mt-2" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+				{% for image in form.images %}{% endfor %}
+			</ul>
 
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}">
+		</div>
+		<div class="col pt-2  d-flex flex-column" id="newTrickImages">
+			<button type="button" id="add-video" class="add_item_link text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" data-collection-holder-class="videos">Ajouter une vidéo</button>
+			<ul class="videos mt-2" data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+				{% for video in form.videos %}{% endfor %}
+			</ul>
 
-        <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Créer
-        </button>
-        {{ form_end(form) }}
-    </div>
+
+		</div>
+
+		<div class="mb-5">
+			{{ form_label(form.description, "Description", {"label_attr": {"class": "text-gray-600"}}) }}
+			{{ form_widget(form.description, {"attr": {"class": "h-[250px] bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}
+			{{ form_errors(form.description) }}
+		</div>
+
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}">
+
+		<button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+			Créer
+		</button>
+		{{ form_end(form) }}
+	</div>
 
 {% endblock %}

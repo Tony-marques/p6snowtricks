@@ -1,5 +1,6 @@
 const allDeleteBtn = document.querySelectorAll(".delete");
 const msgFlashes = document.querySelector(".flash-messages");
+const msg = document.querySelector(".msg");
 
 msgFlashes.style.display = "none";
 
@@ -18,7 +19,7 @@ allDeleteBtn.forEach((btn) => {
             })
             .then((data) => {
                msgFlashes.style.display = "flex";
-               msgFlashes.textContent = data.message;
+               msg.textContent = data.message;
                const parent = e.target.closest(".card");
                parent.remove();
                console.log(data);
