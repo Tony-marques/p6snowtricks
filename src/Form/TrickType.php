@@ -48,6 +48,13 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 "label" => false
             ])
+            ->add("videos", CollectionType::class, [
+                "entry_type" => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                "label" => false
+
+            ])
             ->add('description', TextareaType::class, [
                 "required" => false
             ]);

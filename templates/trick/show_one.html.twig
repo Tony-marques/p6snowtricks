@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block body %}
-	<div class="trick-container flex flex-col items-center">
+	<div class="trick-container flex flex-col items-center bg-gray-100">
 		{% for flash in app.flashes("success") %}
 			<p class="alert alert-success alert-sm w-max mt-5">{{flash}}</p>
 		{% endfor %}
-		<div class="trick w-7/12 flex flex-col items-center my-10 border border-gray-500 rounded-lg relative">
+		<div class="trick w-7/12 flex flex-col items-center my-10 border rounded-lg relative overflow-hidden bg-white text-sm pb-6">
 			{% if is_granted("ROLE_ADMIN") %}
 				<div class="card-actions justify-end mt-1 absolute top-1 right-3">
 					<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
@@ -27,72 +27,111 @@
 
 				</div>
 			{% endif %}
-			<img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="w-full h-[450px] object-cover object-center rounded-lg" alt="Image principal du trick {{trick.mainImageName}}">
-			<div class="medias flex justify-center flex-wrap  mt-4 gap-5 w-full">
+			<img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="w-full h-[450px] object-cover object-center " alt="Image principal du trick {{trick.mainImageName}}">
 
-				{% for image in trick.images %}
-					<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Image {{image.name[0:image.name|length - 5]}}" class="w-[22%] h-36 object-cover rounded-lg">
-				{% endfor %}
-			</div>
-			<div class="description w-10/12 mt-10 p-4 bg-white text-gray-700 rounded-lg">
-				{{ trick.description|nl2br|raw }}
-			</div>
-			<div class="informations flex mt-6 gap-2">
-				<div class="bg-white rounded-lg p-2 text-black">Date
-																																								                    création:
-					{{ trick.createdAt|date("d/m/Y à H:i:s") }}</div>
-				{% if trick.updatedAt %}
-					<div class="bg-white rounded-lg p-2 text-black">Date
-																																																                        Modification:
-						{{ trick.updatedAt|date("d/m/Y à H:i:s") }}</div>
-				{% endif %}
-				<div class="bg-white rounded-lg p-2 text-black">Catégorie:
+
+			<div class="informations flex mt-4 gap-2 w-full px-6 items-center">
+
+				<div class="text-gray-600">Auteur:
+					{{ trick.user.pseudo}}</div>
+
+				<div class="info-separator"></div>
+
+				<div class="text-gray-600">Catégorie:
 					{{ trick.category.name }}</div>
-			</div>
-			<div class="separator h-[0.1rem] w-full bg-neutral-400 lg:w-2/3 mt-3 mb-6"></div>
-			{% if app.user %}
-				{{ form_start(commentForm) }}
 
-				<div class="create-comment flex gap-4 items-center">
-					<div class="w-[400px]">
-						{{ form_widget(commentForm.content, {attr: {class: "rounded-lg w-[400px] h-[150px] resize-none"}}) }}
-						{{ form_errors(commentForm.content) }}
+				<div class="info-separator"></div>
 
-
-					</div>
-
-				</div>
-				{{ form_end(commentForm) }}
-
-				<div class="separator h-[0.1rem] w-full bg-neutral-400 lg:w-2/3 mt-10 mb-6"></div>
-			{% endif %}
-			<div class="comments-container flex flex-col w-6/12 gap-2 mb-5 items-center">
-
-				{% for comment in comments %}
-					<div class="comment flex gap-4 items-center">
-						{% if app.user.profileImage %}
-							<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}" class="w-10 h-10 rounded-full object-cover" alt="Photo de profil de {{app.user.pseudo}}">
-
-						{% else %}
-							<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="Photo de profil par défault">
-
-						{% endif %}
-
-						<div class="p-2 bg-white rounded text-gray-700 w-[500px] h-[88px]">{{ comment.content }}
-						</div>
-					</div>
-				{% endfor %}
-
-				<div class="pagination">
-					{% if totalPages > 1 %}
-						{% for page in 1..totalPages %}
-							{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
-							<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.tricks_show_one", {"slug": trick.slug, "page": page}) }}">{{ page }}</a>
-						{% endfor %}
+				<div class="text-gray-600">Ajouté le:
+					{{ trick.createdAt|date("d/m/Y à H:i:s") }}
+					{% if trick.updatedAt %}
+						(Modifié le:
+						{{ trick.updatedAt|date("d/m/Y à H:i:s") }})
 					{% endif %}
 				</div>
 
+				<div class="info-separator"></div>
+				<a href="#comments" class="text-gray-600 hover:text-red-500 ">
+					{{trick.comments|length}}
+					commentaire{{trick.comments|length > 1 ? "s" : ""}}
+				</a>
 			</div>
+
+			<div class="block-separator"></div>
+
+			<div class="medias flex flex-col justify-center flex-wrap gap-5 w-full">
+				<div class="images flex gap-5 justify-center flex-wrap">
+					{% for image in trick.images %}
+						<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Image {{image.name[0:image.name|length - 5]}}" class="w-[22%] h-36 object-cover rounded-lg">
+					{% endfor %}
+				</div>
+				<div class="videos flex gap-5 justify-center flex-wrap">
+					{% for video in trick.videos %}
+						<iframe src="{{video.url}}" frameborder="0" class="w-5/12 h-52"></iframe>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="block-separator"></div>
+
+			<div class="title text-gray-700 w-full px-6">{{trick.name|upper}}</div>
+			<div class="description w-full px-6 mt-4 text-gray-700">
+				{{ trick.description|nl2br|raw }}
+			</div>
+
+
 		</div>
+
+		<div class="form w-7/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
+			{% if app.user %}
+				{{ form_start(commentForm, {attr: {class: "w-full"}}) }}
+
+				<div class="create-comment flex flex-col gap-4 items-center bg-white">
+					{{ form_widget(commentForm.content, {attr: {class: "border border-gray-200 mb-2 rounded-lg w-full h-[150px] resize-none"}}) }}
+					{{ form_errors(commentForm.content, {attr: {class: "w-full text-red-500"}}) }}
+
+				</div>
+
+				{{ form_end(commentForm) }}
+			{% else %}
+				<p class="text-gray-600">Veuillez vous
+					<a class="hover:text-red-600" href="{{path("app.login")}}">connecter</a>
+					pour commenter cet article</p>
+			{% endif %}
+		</div>
+
+		<div id="comments" class="w-7/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
+			<p class="w-full text-gray-600 mb-3">{{trick.comments|length}}
+				commentaire{{trick.comments|length > 1 ? "s" : ""}}</p>
+			{% for comment in comments %}
+				<div class="comment flex gap-4 w-full">
+					{% if comment.user.profileImage %}
+						<img src="{{ asset("upload/profile/" ~ comment.user.profileImage) }}" class="w-20 h-20 rounded-full object-cover" alt="Photo de profil de {{comment.user.pseudo}}">
+
+					{% else %}
+						<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-20 h-20 rounded-full " alt="Photo de profil par défault">
+
+					{% endif %}
+					<div class="comment-information flex flex-col ">
+						<div class="text-gray-600 mb-2">{{comment.user.pseudo}} le {{comment.createdAt|date("d/m/Y à H:i:s")}}</div>
+						<div class=" text-gray-600 ">{{ comment.content }}
+						</div>
+					</div>
+				</div>
+
+				<div class="block-separator-bis"></div>
+			{% endfor %}
+
+			<div class="pagination">
+				{% if totalPages > 1 %}
+					{% for page in 1..totalPages %}
+						{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
+						<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.tricks_show_one", {"slug": trick.slug, "page": page}) }}">{{ page }}</a>
+					{% endfor %}
+				{% endif %}
+			</div>
+
+		</div>
+
 	</div>
-{% endblock %}
+</div>{% endblock %}
