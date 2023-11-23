@@ -41,15 +41,12 @@ class TrickController extends AbstractController
             $imageFile->move("upload/tricks", $nameImage);
 
             $trick->setMainImageName($nameImage);
-            // $imageFile->setCreatedAt(new DateTimeImmutable());
-            // $imageFile->setTrick($trick);
-            // $trick->addImage($imageFile);
 
             foreach ($trick->getImages() as $image) {
                 // \dd($image);
                 $file = $image->getFile();
                 $name = md5(uniqid()) . '.' . $file->guessExtension();
-                
+
                 $file->move(
                     "upload/tricks",
                     $name
@@ -69,6 +66,8 @@ class TrickController extends AbstractController
             $em->persist($trick);
 
             $em->flush();
+
+            $this->addFlash("success", "Le trick {$trick->getName()} a été crée avec succès !");
 
             if (in_array("ROLE_ADMIN", $userRole)) {
                 return $this->redirectToRoute("app.tricks_manage");
@@ -94,14 +93,14 @@ class TrickController extends AbstractController
         name: '_delete',
         methods: ["GET", "POST"]
     )]
-    public function delete(Request $request, EntityManagerInterface $em, Trick $trick): JsonResponse|Response
+    public function delete(EntityManagerInterface $em, Trick $trick): JsonResponse|Response
     {
         $this->denyAccessUnlessGranted("TRICK_DELETE", $trick);
 
         $em->remove($trick);
         $em->flush();
 
-        \dd($trick->getMainImageName());
+        // \dd($trick->getMainImageName());
 
         if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
             \unlink("upload/tricks/{$trick->getMainImageName()}");
@@ -113,15 +112,11 @@ class TrickController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute("app.home");
+        // return $this->redirectToRoute("app.home");
 
-        // if ($request->getMethod() === "POST") {
-        //     $this->addFlash("success", "Le trick {$trick->getName()} a été supprimé avec succès !");
-        // }
-
-        // return $this->json([
-        //     "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
-        // ]);
+        return $this->json([
+            "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
+        ]);
     }
 
     #[IsGranted("ROLE_USER")]
@@ -177,6 +172,8 @@ class TrickController extends AbstractController
 
             $em->flush();
 
+            $this->addFlash("success", "Le trick {$trick->getName()} a été modifié avec succès !");
+
             return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
         }
 
@@ -206,7 +203,7 @@ class TrickController extends AbstractController
         $comments = $commentRepo->findBy(["trick" => $trick]);
         $currentPage = $request->get("page") ?? "1";
 
-        [$commentForOnePage, $totalPages] = $paginator->paginate(items: $comments, currentPage: $currentPage, limit: 4);
+        [$commentForOnePage, $totalPages] = $paginator->paginate(items: $comments, currentPage: $currentPage, limit: 10);
 
         $commentForm->handleRequest($request);
 

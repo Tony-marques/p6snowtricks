@@ -20,46 +20,60 @@
 				<i class="fa-solid fa-circle-arrow-down fa-3x "></i>
 			</a>
 		</div>
+		<div class="flash-messages alert alert-success w-max mt-2"></div>
 		<div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10">
-
-			{% for trick in tricks %}
-
-				{% set maxLength = 10 %}
-				{% if trick.name|length >= maxLength %}
-					{% set trickname = trick.name|slice(0, maxLength) ~'...' %}
-				{% else %}
-					{% set trickname = trick.name %}
-				{% endif %}
-				<div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
-					<figure><img src="{{ asset("upload/tricks/" ~ trick.mainImage.name) }}" class="h-[200px] object-cover" alt="trick {{trick.name}}" class="w-full"/>
-					</figure>
-					<div class="card-body p-4 flex flex-row justify-between items-center">
-						<a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}" class="card-title hover:text-white">{{ trickname }}</a>
-						{% if is_granted("ROLE_USER") and app.user == trick.user or is_granted("ROLE_ADMIN") %}
-							<div class="card-actions justify-end mt-1">
-								<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
-									<i class="fa-solid fa-pencil"></i>
-								</a>
-
-								<button data-slug="{{ trick.slug }}" title="Supprimer le trick" class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
-									<i class="fa-solid fa-trash-can pointer-events-none	"></i>
-								</button>
-							</div>
-						{% endif %}
-					</div>
+			{% if tricks|length < 1 %}
+				<div class="flex items-center">
+					<p>Il n'y a actuellement aucun trick</p>
+					<a href="{{path("app.tricks_create")}}" class="btn btn-info btn-sm ml-2">+</a>
 				</div>
-			{% endfor %}
+			{% else %}
+				{% for trick in tricks %}
 
-			
+{% if app.user %}
+					{% set maxLength = 10 %}
+{% else %}
+					{% set maxLength = 20 %}
+	
+{% endif %}
+
+					{% if trick.name|length >= maxLength %}
+					
+						{% set trickname = trick.name|slice(0, maxLength) ~'...' %}
+					{% else %}
+						{% set trickname = trick.name %}
+					{% endif %}
+					<div class="card w-[350px] bg-base-100 shadow-xl rounded-lg">
+						<figure><img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="h-[200px] object-cover" alt="trick {{trick.mainImageName}}" class="w-full"/>
+						</figure>
+						<div class="card-body p-4 flex flex-row justify-between items-center">
+							<a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}" class="card-title hover:text-white">{{ trickname }}</a>
+							{% if is_granted("ROLE_USER") and app.user == trick.user or is_granted("ROLE_ADMIN") %}
+								<div class="card-actions justify-end mt-1">
+									<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="btn btn-success btn-sm text-sm hover:bg-green-500 text-gray-700 hover:text-white">
+										<i class="fa-solid fa-pencil"></i>
+									</a>
+
+									<button data-slug="{{ trick.slug }}" title="Supprimer le trick" class="delete btn btn-error btn-sm text-sm hover:bg-red-500 text-gray-700 hover:text-white">
+										<i class="fa-solid fa-trash-can pointer-events-none	"></i>
+									</button>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+
+
 		</div>
 		<div class="pagination">
-				{% if totalPages > 1 %}
-					{% for page in 1..totalPages %}
-						{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
-						<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.home", {"page": page}) }}">{{ page }}</a>
-					{% endfor %}
-				{% endif %}
-			</div>
+			{% if totalPages > 1 %}
+				{% for page in 1..totalPages %}
+					{% set backgroundColor = page == currentPage ? "bg-white" : "bg-gray-500" %}
+					<a class="{{ backgroundColor }} rounded p-2 w-10 inline-flex justify-center" href="{{ path("app.home", {"page": page}) }}">{{ page }}</a>
+				{% endfor %}
+			{% endif %}
+		</div>
 		{% if tricks|length > 10 %}
 			<button class="btn">Charger plus</button>
 		{% endif %}
