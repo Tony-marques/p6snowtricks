@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use DateTimeImmutable;
+use Imagine\Image\Box;
 use App\Entity\Comment;
 use App\Form\TrickType;
+use Imagine\Gd\Imagine;
 use App\Form\CommentType;
 use App\Helpers\Paginator;
+use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Route(path: "/tricks", name: "app.tricks", methods: ["GET", "POST"])]
 class TrickController extends AbstractController
@@ -34,13 +38,24 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('mainImage')->getData();
-            // \dd($imageFile->guessExtension());
 
-            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            // test resize image
+            // $imagine = new Imagine();
+            // $image = $imagine->open($imageFile);
 
-            $imageFile->move("upload/tricks", $nameImage);
+            // $resizedImage = $image->thumbnail(new Box(350, 200));
 
-            $trick->setMainImageName($nameImage);
+            // $resizedImage->save("upload/tricks/resized");
+            // Fin test
+
+            if ($imageFile) {
+                $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+
+                $imageFile->move("upload/tricks", $nameImage);
+
+                $trick->setMainImageName($nameImage);
+            }
+
 
             foreach ($trick->getImages() as $image) {
                 // \dd($image);
@@ -97,13 +112,12 @@ class TrickController extends AbstractController
         name: '_delete',
         methods: ["GET", "POST"]
     )]
-    public function delete(EntityManagerInterface $em, Trick $trick): JsonResponse|Response
+    public function delete(EntityManagerInterface $em, Trick $trick, Request $request): JsonResponse|Response
     {
         $this->denyAccessUnlessGranted("TRICK_DELETE", $trick);
 
         $em->remove($trick);
         $em->flush();
-
 
         if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
             \unlink("upload/tricks/{$trick->getMainImageName()}");
@@ -118,6 +132,32 @@ class TrickController extends AbstractController
         return $this->json([
             "message" => "Le trick {$trick->getName()} a été supprimé avec succès !",
         ]);
+    }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route(
+        path: '/supprimer/admin/{slug}',
+        name: '_delete_dashboard',
+        methods: ["GET", "POST"]
+    )]
+    public function deleteFromDashboard(EntityManagerInterface $em, Trick $trick): JsonResponse|Response
+    {
+        $this->denyAccessUnlessGranted("TRICK_DELETE", $trick);
+
+        $em->remove($trick);
+        $em->flush();
+
+        if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
+            \unlink("upload/tricks/{$trick->getMainImageName()}");
+        }
+
+        foreach ($trick->getImages() as $image) {
+            if (\file_exists("upload/tricks/{$image->getName()}")) {
+                \unlink("upload/tricks/{$image->getName()}");
+            }
+        }
+
+        return $this->redirectToRoute("app.tricks_manage");
     }
 
     #[IsGranted("ROLE_USER")]
@@ -196,8 +236,17 @@ class TrickController extends AbstractController
         name: '_show_one',
         methods: ["GET", "POST"]
     )]
-    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo, Paginator $paginator): Response
+    public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo, Paginator $paginator, TrickRepository $trickRepo, string $slug): Response
     {
+
+
+        $trick = $trickRepo->findOneBy(["slug" => $slug]);
+
+        if ($trick == null) {
+            throw $this->createNotFoundException("ttttt");
+        }
+
+
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
 

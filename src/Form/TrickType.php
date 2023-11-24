@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickType extends AbstractType
 {
@@ -25,22 +26,27 @@ class TrickType extends AbstractType
             ->add("category", EntityType::class, [
                 "placeholder" => "Sélectionner une catégorie",
                 "class" => Category::class,
-                "choice_label" => "name"
+                "choice_label" => "name",
+                "required" => false,
+                "constraints" => [
+                    new NotBlank(message:"Veuillez séléctionner une catégorie")
+                ]
             ])
             ->add("mainImage", FileType::class, [
                 "required" => false,
                 "label" => false,
-                // "constraints" => [
-                //     new File([
-                //         "mimeTypes" => [
-                //             'image/webp',
-                //             'image/jpeg',
-                //             'image/png',
-                //             'image/gif'
-                //         ],
-                //         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté',
-                //     ])
-                // ]
+                "constraints" => [
+                    new File([
+                        "mimeTypes" => [
+                            'image/webp',
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).',
+                    ]),
+                    new NotBlank(message: "Veuillez sélectionner un fichier.")
+                ]
             ])
             ->add("images", CollectionType::class, [
                 "entry_type" => ImageType::class,

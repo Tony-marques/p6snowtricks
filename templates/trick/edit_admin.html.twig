@@ -18,6 +18,7 @@
 			{{ form_label(form.mainImage, "Image principale", {"label_attr": {"class": "block mb-2 text-sm font-medium text-gray-600"}}) }}
 			{{ form_widget(form.mainImage, {"attr": {"class": "bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"}}) }}
 			{{ form_errors(form.mainImage) }}
+			<img src="{{asset("upload/tricks/"  ~ trick.mainImageName)}}" class="w-[22%] h-36 object-cover rounded-lg mx-auto mt-2" alt="">
 		</div>
 		<div class="mb-6">
 			{{ form_label(form.category, "Catégorie", {"label_attr": {"class": "text-gray-600 block mb-2 text-sm font-medium"}}) }}
@@ -67,3 +68,4 @@
 	</div>
 
 {% endblock %}
+

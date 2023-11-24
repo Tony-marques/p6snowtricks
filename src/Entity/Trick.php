@@ -26,7 +26,7 @@ class Trick
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank(message: "Veuillez renseigner un titre")]
     #[Assert\Length(
-        min: 5,
+        min: 4,
         max: 255,
         minMessage: "Le titre doit faire au minimum {{ limit }} caractères, il fait actuellement {{ value_length }} caractère(s)",
         maxMessage: "Le titre doit faire au maximum {{ limit }} caractères, il fait actuellement {{ value_length }} caractère(s)"
@@ -34,7 +34,7 @@ class Trick
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message: "Veuillez renseigner un titre")]
+    #[Assert\NotBlank(message: "Veuillez renseigner une description")]
     #[Assert\Length(
         min: 20,
         minMessage: "La description doit faire au minimum {{ limit }} caractères, elle fait actuellement {{ value_length }} caractères",
