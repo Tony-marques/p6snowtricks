@@ -7,12 +7,22 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Uploader
 {
 
-  public function newNameImage(){
-    
+  public function newNameImage(UploadedFile $file)
+  {
+    $newName = md5(uniqid()) . '.' . $file->guessExtension();
+
+    return $newName;
   }
 
-  public function upload(UploadedFile $file)
+  public function upload(UploadedFile $file, string $path, string $fileName)
   {
-    $file->move("upload/tricks", $nameImage);
+    $file->move($path, $fileName);
+  }
+
+  public function removeImage(string $path)
+  {
+    if (\file_exists($path)) {
+      \unlink($path);
+    }
   }
 }

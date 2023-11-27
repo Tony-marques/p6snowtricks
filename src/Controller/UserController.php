@@ -4,24 +4,25 @@ namespace App\Controller;
 
 use App\Entity\User;
 use DateTimeImmutable;
+use App\Helpers\Uploader;
+use App\Form\EditUserType;
 use App\Form\RegisterType;
 use App\Form\ShowUserType;
 use App\Form\EditUserAdminType;
-use App\Form\EditUserType;
-use App\Form\ForgetPasswordType;
 use App\Form\ResetPasswordType;
+use App\Form\ForgetPasswordType;
+use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Mime\Email;
 
 class UserController extends AbstractController
 {
@@ -185,7 +186,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
-    public function editProfile(Request $request, User $user, EntityManagerInterface $em): Response
+    public function editProfile(Request $request, User $user, EntityManagerInterface $em, Uploader $uploader): Response
     {
         // Créer le voter, peut modifier uniquement son propre profil
         $form = $this->createForm(EditUserType::class, $user);
@@ -194,9 +195,10 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $user->getProfileImageFile();
-            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-
-            $imageFile->move("upload/profile", $nameImage);
+            
+            $uploader->removeImage("upload/profile/{$user->getProfileImage()}");
+            $nameImage = $uploader->newNameImage($imageFile);
+            $uploader->upload($imageFile, "upload/profile", $nameImage);
 
             $user->setProfileImage($nameImage);
             $em->persist($user);
