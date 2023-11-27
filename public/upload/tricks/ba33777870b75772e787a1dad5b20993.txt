@@ -1,7 +1,0 @@
-git init
-git remote add name link
-git pull --rebase name
-git checkout branch
-git add .
-git commit -m ""
-git push name

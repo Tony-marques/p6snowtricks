@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $profileImage = null;
 
-    private UploadedFile $profileImageFile;
+    private ?UploadedFile $profileImageFile = null;
 
     #[Assert\LessThan(
         100,
