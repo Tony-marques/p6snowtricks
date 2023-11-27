@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Trait\TimestampableTrait;
 use App\Repository\ImageRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -20,7 +21,8 @@ class Image
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    private UploadedFile $file;
+    #[assert\NotNull(group: ["creation"], message: "Veuillez mettre un fichier")]
+    private ?UploadedFile $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: true)]

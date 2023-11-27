@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: "name", message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre.")]
@@ -24,8 +25,9 @@ class Trick
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Assert\NotBlank(message: "Veuillez renseigner un titre")]
+    #[Assert\NotBlank(groups: ["creation", "edition"], message: "Veuillez renseigner un titre")]
     #[Assert\Length(
+        groups: ["creation", "edition"],
         min: 4,
         max: 255,
         minMessage: "Le titre doit faire au minimum {{ limit }} caractères, il fait actuellement {{ value_length }} caractère(s)",
@@ -34,8 +36,12 @@ class Trick
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message: "Veuillez renseigner une description")]
+    #[Assert\NotBlank(
+        groups: ["creation", "edition"],
+        message: "Veuillez renseigner une description"
+    )]
     #[Assert\Length(
+        groups: ["creation", "edition"],
         min: 20,
         minMessage: "La description doit faire au minimum {{ limit }} caractères, elle fait actuellement {{ value_length }} caractères",
     )]
@@ -48,12 +54,21 @@ class Trick
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    // #[ORM\OneToOne(targetEntity: Image::class)]
-    // #[ORM\JoinColumn(nullable: true)]
+    #[Assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
+    #[Assert\File(
+        groups: ["creation"],
+        mimeTypes: [
+            'image/webp',
+            'image/jpeg',
+            'image/png',
+            'image/gif'
+        ],
+        mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
+    )]
     private ?UploadedFile $mainImage = null;
 
-    // private $mainImageFile;
     #[ORM\Column()]
+    #[Assert\NotNull()]
     private $mainImageName = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
@@ -61,9 +76,21 @@ class Trick
 
     #[ORM\ManyToOne(inversedBy: 'trick')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(groups: ["creation", "edition"], message: "Veuillez séléctionner une catégorie.")]
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
+    // #[Assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
+    // #[Assert\File(
+    //     groups: ["creation"],
+    //     mimeTypes: [
+    //         'image/webp',
+    //         'image/jpeg',
+    //         'image/png',
+    //         'image/gif'
+    //     ],
+    //     mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
+    // )]
     private Collection $images;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true, cascade: ["persist"])]

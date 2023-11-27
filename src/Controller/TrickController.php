@@ -30,7 +30,7 @@ class TrickController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, ["validation_groups" => ["creation"]]);
 
         $form->handleRequest($request);
 
@@ -39,14 +39,6 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('mainImage')->getData();
 
-            // test resize image
-            // $imagine = new Imagine();
-            // $image = $imagine->open($imageFile);
-
-            // $resizedImage = $image->thumbnail(new Box(350, 200));
-
-            // $resizedImage->save("upload/tricks/resized");
-            // Fin test
 
             if ($imageFile) {
                 $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
@@ -55,22 +47,24 @@ class TrickController extends AbstractController
 
                 $trick->setMainImageName($nameImage);
             }
+            \dd($form->get("images")->getData());
 
 
             foreach ($trick->getImages() as $image) {
-                // \dd($image);
-                $file = $image->getFile();
-                $name = md5(uniqid()) . '.' . $file->guessExtension();
+                $file = $image->getFile() ?? null;
+                if ($file != null) {
+                    $name = md5(uniqid()) . '.' . $file->guessExtension();
 
-                $file->move(
-                    "upload/tricks",
-                    $name
-                );
+                    $file->move(
+                        "upload/tricks",
+                        $name
+                    );
 
-                $image->setName($name);
-                $image->setCreatedAt(new DateTimeImmutable());
-                $image->setTrick($trick);
-                $trick->addImage($image);
+                    $image->setName($name);
+                    $image->setCreatedAt(new DateTimeImmutable());
+                    $image->setTrick($trick);
+                    $trick->addImage($image);
+                }
             }
 
             foreach ($trick->getVideos() as $video) {
@@ -170,20 +164,26 @@ class TrickController extends AbstractController
     {
         $this->denyAccessUnlessGranted("TRICK_EDIT", $trick);
 
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, ["validation_groups" => ["edition"]]);
 
         $form->handleRequest($request);
 
         $userRole = $this->getUser()->getRoles();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
-                \unlink("upload/tricks/{$trick->getMainImageName()}");
-            }
+
 
             $imageFile = $form->get('mainImage')->getData();
-            $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
-            $imageFile->move("upload/tricks", $nameImage);
+
+            if ($imageFile) {
+                if (\file_exists("upload/tricks/{$trick->getMainImageName()}")) {
+                    \unlink("upload/tricks/{$trick->getMainImageName()}");
+                }
+                $nameImage = md5(uniqid()) . '.' . $imageFile->guessExtension();
+                $imageFile->move("upload/tricks", $nameImage);
+                $trick->setMainImageName($nameImage)->setUpdatedAt(new DateTimeImmutable());
+            }
+
 
             foreach ($trick->getImages() as $image) {
                 if (\file_exists("upload/tricks/{$image->getName()}")) {
@@ -191,7 +191,6 @@ class TrickController extends AbstractController
                 }
 
                 $file = $image->getFile();
-                // \dd($file->guessExtension());
 
                 $name = md5(uniqid()) . '.' . $file->guessExtension();
 
@@ -207,7 +206,7 @@ class TrickController extends AbstractController
                 // \dd($image->getName());
             }
 
-            $trick->setMainImageName($nameImage)->setUpdatedAt(new DateTimeImmutable());
+            // $trick->setMainImageName($nameImage)->setUpdatedAt(new DateTimeImmutable());
 
             $em->persist($trick);
 
