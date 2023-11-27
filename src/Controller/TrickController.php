@@ -222,8 +222,6 @@ class TrickController extends AbstractController
     )]
     public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo, Paginator $paginator, TrickRepository $trickRepo, string $slug): Response
     {
-
-
         $trick = $trickRepo->findOneBy(["slug" => $slug]);
 
         if ($trick == null) {

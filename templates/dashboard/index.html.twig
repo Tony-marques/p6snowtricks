@@ -1,9 +1,67 @@
 {% extends 'admin.html.twig' %}
 
 {% block title %}
-    Dashboard
+	Dashboard
 {% endblock %}
 
 {% block body %}
+	<div class="dashboard mx-auto flex flex-col gap-2">
+		<p class="text-gray-600  text-xl mx-auto mb-2">Bienvenue sur votre dashboard</p>
+		<div class="tricks-container text-gray-500 bg-white p-5 border border-gray-200 rounded-xl">
+			<p class="mb-2">Les 3 derniers tricks:</p>
+			<div class="tricks  flex gap-2 ">
+				{% for trick in last3tricks %}
+					<div class="trick card w-[350px] bg-white shadow-sm rounded-lg border border-gray-200">
+						<figure class=""><img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="h-[200px] w-full object-cover object-center" alt="trick {{trick.mainImageName}}" class="w-full"/>
+						</figure>
+						<div class="card-body p-4 flex flex-col justify-between">
+							<a href="{{ path("app.tricks_show_one", {slug: trick.slug}) }}" class=" text-gray-600 hover:text-red-600">{{ trick.name }}</a>
+							<p class="text-sm">Rédigé par
+								{{trick.user.pseudo}}</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+		</div>
+
+		<div class="flex gap-2">
+
+			<div class="users text-gray-500 bg-white p-5 border border-gray-200 rounded-xl flex flex-col w-[50%]">
+				<p class="mb-2">Les 3 derniers utilisateurs:</p>
+				<div class="flex flex-col  gap-2">
+					{% for user in last3users %}
+						<div class="user flex items-center gap-2">
+							{% if user.profileImage %}
+								<img src="{{ asset("upload/profile/" ~ user.profileImage) }}" class="w-10 h-10 rounded-full object-cover" alt="Photo de profil de {{user.pseudo}}">
+
+							{% else %}
+								<img src="{{ asset("assets/images/default-profile.jpg") }}" class="w-10 h-10 rounded-full " alt="Photo de profil par défault">
+
+							{% endif %}
+							<p>{{user.pseudo}}</p>
+                            <p class="text-xs">inscription le {{user.createdAt|date("d/m/Y à H:h:i")}}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+
+			<div class="users text-gray-500 bg-white p-5 border border-gray-200 rounded-xl flex flex-col w-[50%] justify-content items-center">
+				<div class="title text-gray-600">Informations utiles:</div>
+				<div class="informations flex-1 justify-center items-center w-full flex flex-col">
+					<span>
+						{{allTricks|length}}
+						tricks rédigés
+					</span>
+					<span>
+						{{allUsers|length}}
+						utilisateurs inscrits
+					</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
 
 {% endblock %}
