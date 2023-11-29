@@ -14,7 +14,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-#[UniqueEntity(fields: "name", message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre.")]
+#[UniqueEntity(
+    groups: ["creation", "edition"],
+    fields: ["name"],
+    message: "Le nom {{ value }} est déjà utilisé pour un autre trick, veuillez en choisir un autre."
+)]
 class Trick
 {
     use TimestampableTrait;

@@ -247,7 +247,9 @@ class TrickController extends AbstractController
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirectToRoute("app.tricks_show_one", ["slug" => $trick->getSlug()]);
+            $url = $this->generateUrl("app.tricks_show_one", ["slug" => $trick->getSlug()]) . "#comments";
+  
+            return $this->redirect($url);
         }
 
         return $this->render('trick/show_one.html.twig', [
