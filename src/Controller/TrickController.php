@@ -177,19 +177,21 @@ class TrickController extends AbstractController
                 $trick->setMainImageName($nameImage)->setUpdatedAt(new DateTimeImmutable());
             }
 
-
             foreach ($trick->getImages() as $image) {
-                $uploader->removeImage("upload/tricks/{$image->getName()}");
 
                 $file = $image->getFile();
 
-                $name = $uploader->newNameImage($file);
-                $uploader->upload($file, "upload/tricks", $name);
+                if ($file) {
+                    $uploader->removeImage("upload/tricks/{$image->getName()}");
 
-                $image->setName($name);
-                $image->setCreatedAt(new DateTimeImmutable());
-                $image->setTrick($trick);
-                $trick->addImage($image);
+                    $name = $uploader->newNameImage($file);
+                    $uploader->upload($file, "upload/tricks", $name);
+
+                    $image->setName($name);
+                    $image->setCreatedAt(new DateTimeImmutable());
+                    $image->setTrick($trick);
+                    $trick->addImage($image);
+                }
             }
 
 
@@ -248,7 +250,7 @@ class TrickController extends AbstractController
             $em->flush();
 
             $url = $this->generateUrl("app.tricks_show_one", ["slug" => $trick->getSlug()]) . "#comments";
-  
+
             return $this->redirect($url);
         }
 
