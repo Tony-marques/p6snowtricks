@@ -4,10 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use DateTimeImmutable;
-use Imagine\Image\Box;
 use App\Entity\Comment;
 use App\Form\TrickType;
-use Imagine\Gd\Imagine;
 use App\Form\CommentType;
 use App\Helpers\Paginator;
 use App\Helpers\Uploader;
@@ -21,7 +19,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Route(path: "/tricks", name: "app.tricks", methods: ["GET", "POST"])]
 class TrickController extends AbstractController
@@ -39,7 +36,6 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('mainImage')->getData();
-
 
             if ($imageFile) {
                 $nameImage = $uploader->newNameImage($imageFile);

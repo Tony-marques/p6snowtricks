@@ -28,7 +28,7 @@
 				</button>
 			</div>
 		{% endfor %}
-		<div class="trick w-7/12 flex flex-col items-center my-10 border rounded-lg relative overflow-hidden bg-white text-sm pb-6">
+		<div class="trick 2xl:w-7/12 w-11/12 flex flex-col items-center my-10 border rounded-lg relative overflow-hidden bg-white text-sm pb-6">
 			{% if is_granted("ROLE_ADMIN") or app.user == trick.user %}
 				<div class="card-actions justify-end mt-1 absolute top-1 right-3">
 					<a href="{{ path("app.tricks_edit", {slug: trick.slug}) }}" title="Modifier le trick" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-2.5 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -45,17 +45,17 @@
 
 			<div class="informations flex mt-4 gap-2 w-full px-6 items-center">
 
-				<div class="text-gray-600">Auteur:
+				<div class="text-gray-600 lg:text-base text-xs">Auteur:
 					{{ trick.user.pseudo}}</div>
 
 				<div class="info-separator"></div>
 
-				<div class="text-gray-600">Catégorie:
+				<div class="text-gray-600 lg:text-base text-xs">Catégorie:
 					{{ trick.category.name }}</div>
 
 				<div class="info-separator"></div>
 
-				<div class="text-gray-600">Ajouté le:
+				<div class="text-gray-600 lg:text-base text-xs">Ajouté le:
 					{{ trick.createdAt|date("d/m/Y à H:i:s") }}
 					{% if trick.updatedAt %}
 						(Modifié le:
@@ -64,7 +64,7 @@
 				</div>
 
 				<div class="info-separator"></div>
-				<a href="#comments" class="text-gray-600 hover:text-red-500 ">
+				<a href="#comments" class="text-gray-600 hover:text-red-500 lg:text-base text-xs">
 					{{trick.comments|length}}
 					commentaire{{trick.comments|length > 1 ? "s" : ""}}
 				</a>
@@ -75,7 +75,7 @@
 			<div class="medias flex flex-col justify-center flex-wrap gap-5 w-full">
 				<div class="images flex gap-5 justify-center flex-wrap">
 					{% for image in trick.images %}
-						<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Image {{image.name[0:image.name|length - 5]}}" class="w-[22%] h-36 object-cover rounded-lg">
+						<img src="{{ asset('upload/tricks/' ~ image.name) }}" alt="Image {{image.name[0:image.name|length - 5]}}" class="xl:w-[25%] md:w-[30%] w-[45%] h-36 object-cover rounded-lg">
 					{% endfor %}
 				</div>
 				<div class="videos flex gap-5 justify-center flex-wrap">
@@ -95,7 +95,7 @@
 
 		</div>
 
-		<div class="form w-7/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
+		<div class="form 2xl:w-7/12 w-11/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
 			{% if app.user %}
 				{{ form_start(commentForm, {attr: {class: "w-full"}}) }}
 
@@ -113,7 +113,7 @@
 			{% endif %}
 		</div>
 
-		<div id="comments" class="w-7/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
+		<div id="comments" class="2xl:w-7/12 w-11/12 flex flex-col items-center mb-10 border rounded-lg relative overflow-hidden bg-white text-sm p-6">
 			<p class="w-full text-gray-600 mb-3">{{trick.comments|length}}
 				commentaire{{trick.comments|length > 1 ? "s" : ""}}</p>
 			{% for comment in comments %}
@@ -126,7 +126,9 @@
 
 					{% endif %}
 					<div class="comment-information flex flex-col ">
-						<div class="text-gray-600 mb-2">{{comment.user.pseudo}} le {{comment.createdAt|date("d/m/Y à H:i:s")}}</div>
+						<div class="text-gray-600 mb-2">{{comment.user.pseudo}}
+							le
+							{{comment.createdAt|date("d/m/Y à H:i:s")}}</div>
 						<div class=" text-gray-600 ">{{ comment.content }}
 						</div>
 					</div>

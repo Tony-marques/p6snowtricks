@@ -6,9 +6,6 @@
 
 {% block body %}
 
-	{% if error %}
-		{{ error.messageKey }}
-	{% endif %}
 
 	<div class="login-container flex flex-col items-center justify-center flex-1">
 		{% for flash in app.flashes("success") %}
@@ -27,15 +24,15 @@
 				</button>
 			</div>
 		{% endfor %}
-		<form action="{{ path("app.login") }}" method="post" class="w-[500px] bg-white rounded-xl p-5 border border-gray-200">
+		<form action="{{ path("app.login") }}" method="post" class="w-full mx-2 md:w-[500px] bg-white rounded-xl p-5 border border-gray-200">
 			<div class="mb-6">
 				<label for="email" class="block mb-2 text-sm font-medium text-gray-600">Adresse
-																				                    e-mail</label>
+																																			                    e-mail</label>
 				<input type="email" id="email" name="_username" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="example@gmail.com">
 			</div>
 			<div class="mb-6">
 				<label for="password" class="block mb-2 text-sm font-medium text-gray-600">Mot de
-																				                    passe</label>
+																																			                    passe</label>
 				<input type="password" name="_password" id="password" class="bg-white border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 			<div class="flex items-start mb-2">
@@ -43,7 +40,7 @@
 					<input id="remember" name="_remember_me" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800">
 				</div>
 				<label for="remember" class="ml-2 text-sm font-medium text-gray-600">Se souvenir de
-																				                    moi</label>
+																																			                    moi</label>
 			</div>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}">
 
@@ -51,6 +48,13 @@
 				Connexion
 			</button>
 			<a href="{{ path("app.forget_password") }}" class="btn btn-link mt-4 w-max pl-0 text-gray-600 hover:text-red-500 normal-case">Mot de passe oublié ?</a>
+
+			{% if error %}
+				<ul>
+					<li>{{error.messageKey|trans(error.messageData, "security")}}</li>
+				</ul>
+			{% endif %}
+
 		</form>
 	</div>
 {% endblock %}

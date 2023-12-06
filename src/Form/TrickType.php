@@ -2,18 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Trick;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class TrickType extends AbstractType
 {
@@ -28,10 +29,16 @@ class TrickType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name",
                 "required" => false
-                
+
             ])
             ->add("mainImage", FileType::class, [
                 "required" => false,
+                "label" => false,
+            ])
+            ->add("images", CollectionType::class, [
+                "entry_type" => ImageType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
                 "label" => false,
                 // "constraints" => [
                 //     new File([
@@ -43,13 +50,8 @@ class TrickType extends AbstractType
                 //         ],
                 //         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).',
                 //     ]),
+                //     new NotNull(message: "Veuillez sélectionner un fichier.")
                 // ]
-            ])
-            ->add("images", CollectionType::class, [
-                "entry_type" => ImageType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                "label" => false
             ])
             ->add("videos", CollectionType::class, [
                 "entry_type" => VideoType::class,
@@ -68,6 +70,7 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            "validation_groups" => ["creation", "edition"]
         ]);
     }
 }

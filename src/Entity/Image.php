@@ -21,8 +21,18 @@ class Image
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[assert\NotNull(group: ["creation"], message: "Veuillez mettre un fichier")]
-    private ?UploadedFile $file = null;
+    #[assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
+    #[Assert\File(
+        groups: ["creation", "edition"],
+        mimeTypes: [
+            'image/webp',
+            'image/jpeg',
+            'image/png',
+            'image/gif'
+        ],
+        mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
+    )]
+    private UploadedFile $file;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: true)]

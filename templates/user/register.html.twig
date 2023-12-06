@@ -6,7 +6,7 @@
 
 {% block body %}
        <div class="register-container flex items-center justify-center flex-1">
-        {{ form_start(form, {attr: {class: "w-[500px] bg-white rounded-xl p-5 border border-gray-200"}}) }}
+        {{ form_start(form, {attr: {class: "w-full mx-2 md:w-[500px] bg-white rounded-xl p-5 border border-gray-200"}}) }}
         <div class="mb-6">
             {{ form_label(form.email, "Adresse e-mail", {"label_attr": {"class": "block mb-2 text-sm font-medium text-gray-600"}}) }}
             {{ form_widget(form.email, {"attr": {"class": "bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}}) }}

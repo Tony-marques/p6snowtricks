@@ -59,22 +59,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         max: 255,
         minMessage: "Le pseudo doit contenir au minimum 4 caractères",
         maxMessage: "Le pseudo doit contenir au maximum 255 caractères",
-        groups: ["user_register"]
+        groups: ["user_register", "user_edit"]
     )]
-    #[Assert\NotBlank(
+    #[Assert\NotNull(
         message: "Merci de renseigner un pseudo",
-        groups: ["user_register"]
+        groups: ["user_register", "user_edit"]
     )]
     private ?string $pseudo = null;
 
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(
-        groups: ["user_edit"]
-    )]
     private ?string $profileImage = null;
 
-    private ?UploadedFile $profileImageFile = null;
+    // private ?UploadedFile $profileImageFile = null;
 
     #[Assert\LessThan(
         100,
@@ -267,21 +264,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Get the value of profileImageFile
-     */ 
-    public function getProfileImageFile()
-    {
-        return $this->profileImageFile;
-    }
+     */
+    // public function getProfileImageFile()
+    // {
+    //     return $this->profileImageFile;
+    // }
 
-    /**
-     * Set the value of profileImageFile
-     *
-     * @return  self
-     */ 
-    public function setProfileImageFile($profileImageFile)
-    {
-        $this->profileImageFile = $profileImageFile;
+    // /**
+    //  * Set the value of profileImageFile
+    //  *
+    //  * @return  self
+    //  */ 
+    // public function setProfileImageFile($profileImageFile)
+    // {
+    //     $this->profileImageFile = $profileImageFile;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

@@ -51,7 +51,7 @@
 			</button>
 		</div>
 
-		<div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10">
+		<div id="tricks" class="flex flex-row flex-wrap justify-center gap-6 my-10 2xl:w-9/12 w-11/12">
 			{% if tricks|length < 1 %}
 
 
@@ -79,7 +79,7 @@
 					{% else %}
 						{% set trickname = trick.name %}
 					{% endif %}
-					<div class="card w-[350px] bg-white shadow-sm rounded-lg">
+					<div class="card w-[45%] 2xl:w-[350px] lg:w-[30%]   bg-white shadow-sm rounded-lg">
 						<figure class=""><img src="{{ asset("upload/tricks/" ~ trick.mainImageName) }}" class="h-[200px] w-full object-cover object-center" alt="trick {{trick.mainImageName}}" class="w-full"/>
 						</figure>
 						<div class="card-body p-4 flex flex-row justify-between items-center">

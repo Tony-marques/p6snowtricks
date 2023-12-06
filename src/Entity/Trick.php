@@ -60,7 +60,7 @@ class Trick
 
     #[Assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
     #[Assert\File(
-        groups: ["creation"],
+        groups: ["creation", "edition"],
         mimeTypes: [
             'image/webp',
             'image/jpeg',
@@ -84,9 +84,9 @@ class Trick
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
-    // #[Assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
+    // #[assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
     // #[Assert\File(
-    //     groups: ["creation"],
+    //     groups: ["creation", "edition"],
     //     mimeTypes: [
     //         'image/webp',
     //         'image/jpeg',
@@ -95,6 +95,7 @@ class Trick
     //     ],
     //     mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
     // )]
+    #[Assert\Valid()]
     private Collection $images;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true, cascade: ["persist"])]

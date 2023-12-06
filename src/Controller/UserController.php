@@ -123,7 +123,7 @@ class UserController extends AbstractController
         $form = $this->createForm(ForgetPasswordType::class, $user);
 
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $token = bin2hex(random_bytes(32));
 
@@ -189,18 +189,30 @@ class UserController extends AbstractController
     public function editProfile(Request $request, User $user, EntityManagerInterface $em, Uploader $uploader): Response
     {
         // Créer le voter, peut modifier uniquement son propre profil
-        $form = $this->createForm(EditUserType::class, $user);
+        $form = $this->createForm(EditUserType::class, $user, ["validation_groups" => ["user_edit"]]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $user->getProfileImageFile();
-            
-            $uploader->removeImage("upload/profile/{$user->getProfileImage()}");
-            $nameImage = $uploader->newNameImage($imageFile);
-            $uploader->upload($imageFile, "upload/profile", $nameImage);
+            // \dump($form->isSubmitted() ? "oui" : "non");
+            // \dump($form->isValid() ? "oui" : "non");
+            // \dd("toto");
 
-            $user->setProfileImage($nameImage);
+            $imageFile = $form->get("profileImageFile")->getData() ?? null;
+            if ($imageFile != null) {
+
+                if ($user->getProfileImage() != null) {
+
+                    $uploader->removeImage("upload/profile/{$user->getProfileImage()}");
+                }
+
+                $nameImage = $uploader->newNameImage($imageFile);
+
+                $uploader->upload($imageFile, "upload/profile", $nameImage);
+
+                $user->setProfileImage($nameImage);
+            }
+
             $em->persist($user);
             $em->flush();
 

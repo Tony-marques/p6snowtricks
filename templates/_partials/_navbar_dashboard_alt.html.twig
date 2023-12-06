@@ -1,0 +1,56 @@
+<header class="navbar bg-base-100 justify-center">
+	<div class="w-[1200px] justify-between">
+
+		<div class=" ">
+			<a class="btn btn-ghost normal-case text-xl">
+				<img src="{{ asset("/assets/images/logo.png") }}" alt="" class="w-[75px]">
+			</a>
+		</div>
+		<a href="{{path("app.home")}}">Retour au site</a>
+		{% if app.user %}
+
+			<div class="flex-none">
+				<div class="dropdown dropdown-end">
+					<label tabindex="0" class="btn btn-ghost btn-circle avatar">
+						<div class="w-10 rounded-full">
+							{% if app.user.profileImage %}
+								<img src="{{ asset("upload/profile/" ~ app.user.profileImage) }}"/>
+							{% else %}
+								<img src="{{ asset("/assets/images/default-profile.jpg") }}"/>
+							{% endif %}
+						</div>
+					</label>
+					<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+
+						{% if is_granted("ROLE_ADMIN") %}
+							<p class="py-2 px-1">Trick</p>
+							<li>
+								<a href="{{ path("app.tricks_create") }}" class="py-2">Créer</a>
+							</li>
+							<li>
+								<a href="{{ path("app.tricks_manage") }}" class="py-2">Gérer</a>
+							</li>
+							<div class="border border-gray-700"></div>
+							<p class="py-2 px-1">Utilisateurs</p>
+
+							<li>
+								<a href="{{ path("app.users") }}" class="py-2">Gérer</a>
+							</li>
+							<div class="border border-gray-700"></div>
+							<p class="py-2 px-1">Catégories</p>
+							<li>
+								<a href="{{ path("categories_create") }}" class="py-2">Créer</a>
+							</li>
+							<li>
+								<a href="{{ path("categories_manage") }}" class="py-2">Gérer</a>
+							</li>
+						{% endif %}
+
+
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+
+	</div>
+</header>
