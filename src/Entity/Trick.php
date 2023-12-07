@@ -4,14 +4,13 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Trait\TimestampableTrait;
+use App\CustomTrait\TimestampableTrait;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(
@@ -84,21 +83,11 @@ class Trick
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, orphanRemoval: true, cascade: ["persist"])]
-    // #[assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
-    // #[Assert\File(
-    //     groups: ["creation", "edition"],
-    //     mimeTypes: [
-    //         'image/webp',
-    //         'image/jpeg',
-    //         'image/png',
-    //         'image/gif'
-    //     ],
-    //     mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
-    // )]
     #[Assert\Valid()]
     private Collection $images;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true, cascade: ["persist"])]
+    #[Assert\Valid()]
     private Collection $videos;
 
     public function __construct()
@@ -236,7 +225,7 @@ class Trick
     /**
      * Get the value of mainImage
      */
-    public function getMainImage()
+    public function getMainImage(): ?UploadedFile
     {
         return $this->mainImage;
     }
@@ -246,37 +235,17 @@ class Trick
      *
      * @return  self
      */
-    public function setMainImage($mainImage)
+    public function setMainImage(?UploadedFile $mainImage)
     {
         $this->mainImage = $mainImage;
 
         return $this;
     }
 
-    // /**
-    //  * Get the value of mainImageFile
-    //  */ 
-    // public function getMainImageFile()
-    // {
-    //     return $this->mainImageFile;
-    // }
-
-    // /**
-    //  * Set the value of mainImageFile
-    //  *
-    //  * @return  self
-    //  */ 
-    // public function setMainImageFile($mainImageFile)
-    // {
-    //     $this->mainImageFile = $mainImageFile;
-
-    //     return $this;
-    // }
-
     /**
      * Get the value of mainImageName
      */
-    public function getMainImageName()
+    public function getMainImageName(): ?string
     {
         return $this->mainImageName;
     }
@@ -286,7 +255,7 @@ class Trick
      *
      * @return  self
      */
-    public function setMainImageName($mainImageName)
+    public function setMainImageName(?string $mainImageName)
     {
         $this->mainImageName = $mainImageName;
 

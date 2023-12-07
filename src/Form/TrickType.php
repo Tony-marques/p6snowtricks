@@ -29,7 +29,6 @@ class TrickType extends AbstractType
                 "class" => Category::class,
                 "choice_label" => "name",
                 "required" => false
-
             ])
             ->add("mainImage", FileType::class, [
                 "required" => false,
@@ -40,18 +39,6 @@ class TrickType extends AbstractType
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
                 "label" => false,
-                // "constraints" => [
-                //     new File([
-                //         "mimeTypes" => [
-                //             'image/webp',
-                //             'image/jpeg',
-                //             'image/png',
-                //             'image/gif'
-                //         ],
-                //         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).',
-                //     ]),
-                //     new NotNull(message: "Veuillez sélectionner un fichier.")
-                // ]
             ])
             ->add("videos", CollectionType::class, [
                 "entry_type" => VideoType::class,

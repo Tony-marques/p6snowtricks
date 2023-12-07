@@ -15,7 +15,10 @@ class Video
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotNull(groups: ["creation"], message: "Veuillez mettre un fichier")]
+    #[Assert\Url(
+        groups: ["creation"],
+        message: 'URL non valide',
+    )]
     private ?string $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]

@@ -4,7 +4,7 @@ namespace App\DataFixtures\FixturesHelpers;
 
 class VideoChoice
 {
-  public function choice($trick)
+  public function choice(string $trick): ?string
   {
     switch ($trick) {
       case "Mute": {

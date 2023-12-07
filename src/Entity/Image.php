@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Trait\TimestampableTrait;
+use App\CustomTrait\TimestampableTrait;
 use App\Repository\ImageRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -55,7 +55,7 @@ class Image
         return $this;
     }
 
-    public function getFile()
+    public function getFile(): ?UploadedFile
     {
         return $this->file;
     }

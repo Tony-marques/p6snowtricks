@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
-use App\Trait\TimestampableTrait;
+use App\CustomTrait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
