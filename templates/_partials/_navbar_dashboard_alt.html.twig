@@ -6,7 +6,12 @@
 				<img src="{{ asset("/assets/images/logo.png") }}" alt="" class="w-[75px]">
 			</a>
 		</div>
-		<a href="{{path("app.home")}}">Retour au site</a>
+		<ul class="menu menu-sm z-[1] p-2 shadow bg-base-100 rounded-box flex flex-row gap-2">
+
+			<li>
+				<a href="{{path("app.home")}}" class="">Retour au site</a>
+			</li>
+		</ul>
 		{% if app.user %}
 
 			<div class="flex-none">
@@ -23,6 +28,11 @@
 					<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
 
 						{% if is_granted("ROLE_ADMIN") %}
+							<li>
+								<a href="{{ path("app.dashboard") }}" class="py-2">Dashboard</a>
+							</li>
+							<div class="border border-gray-700"></div>
+
 							<p class="py-2 px-1">Trick</p>
 							<li>
 								<a href="{{ path("app.tricks_create") }}" class="py-2">Créer</a>

@@ -208,7 +208,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageFile = $form->get("profileImageFile")->getData() ?? null;
-            if ($imageFile != null) {
+            if ($imageFile !== null) {
 
                 if ($user->getProfileImage() != null) {
 
