@@ -77,7 +77,7 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'trick')]
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(groups: ["creation", "edition"], message: "Veuillez séléctionner une catégorie.")]
     private ?Category $category = null;

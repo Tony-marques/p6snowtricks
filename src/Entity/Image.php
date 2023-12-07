@@ -32,7 +32,7 @@ class Image
         ],
         mimeTypesMessage: 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).'
     )]
-    private UploadedFile $file;
+    private ?UploadedFile $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: true)]
