@@ -2,10 +2,12 @@
 
 namespace App\DataFixtures\FixturesHelpers;
 
+use App\Entity\Category;
+
 
 class CategoryChoice
 {
-  public function choice(string $trick, array $categories): ?string
+  public function choice(string $trick, array $categories): ?Category
   {
     switch ($trick) {
       case "Mute": {
