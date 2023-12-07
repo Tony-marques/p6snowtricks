@@ -46,7 +46,7 @@ class TrickController extends AbstractController
 
             foreach ($trick->getImages() as $image) {
                 $file = $image->getFile() ?? null;
-                if ($file != null) {
+                if ($file !== null) {
                     $nameImage = $uploader->newNameImage($file);
                     $uploader->upload($file, "upload/tricks", $nameImage);
 
@@ -221,11 +221,6 @@ class TrickController extends AbstractController
     public function showOne(Request $request, EntityManagerInterface $em, Trick $trick, CommentRepository $commentRepo, Paginator $paginator, TrickRepository $trickRepo, string $slug): Response
     {
         $trick = $trickRepo->findOneBy(["slug" => $slug]);
-
-        if ($trick == null) {
-            throw $this->createNotFoundException("ttttt");
-        }
-
 
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
