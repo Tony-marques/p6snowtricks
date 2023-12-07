@@ -71,7 +71,6 @@ class AppFixtures extends Fixture
         foreach ($tricksName as $trick) {
             $newTrick = new Trick();
 
-            // $categoryKey = \array_rand($categories);
             $userKey = \array_rand($users);
 
             $categoryChoice = $this->categoryChoice->choice($trick, $categories);

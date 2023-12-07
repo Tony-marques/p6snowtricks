@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
-use App\Trait\TimestampableTrait;
+use App\CustomTrait\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

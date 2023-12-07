@@ -32,8 +32,9 @@
 			<button type="button" id="add-image" class="add_item_link text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" data-collection-holder-class="images">Ajouter une image</button>
 			<ul class="images mt-2" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
 				{% for image in form.images %}
-					{{form_widget(image)}}
+					{{ form_widget(image)}}
 					{{ form_errors(image) }}
+
 				{% endfor %}
 			</ul>
 
@@ -42,7 +43,10 @@
 		<div class="col pt-2  d-flex flex-column" id="newTrickImages">
 			<button type="button" id="add-video" class="add_item_link text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" data-collection-holder-class="videos">Ajouter une vidéo</button>
 			<ul class="videos mt-2" data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
-				{% for video in form.videos %}{% endfor %}
+				{% for video in form.videos %}
+					{{ form_widget(video)}}
+					{{ form_errors(video) }}
+				{% endfor %}
 			</ul>
 
 

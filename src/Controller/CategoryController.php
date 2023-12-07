@@ -86,7 +86,7 @@ class CategoryController extends AbstractController
 
     
     #[Route(path: "/supprimer/{slug}", name: "delete")]
-    public function delete(Category $category)
+    public function delete(Category $category): Response
     {
         $this->em->remove($category);
         $this->em->flush();

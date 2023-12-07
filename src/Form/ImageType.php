@@ -23,18 +23,6 @@ class ImageType extends AbstractType
                 ],
                 "label" => false,
                 "required" => false,
-                // "constraints" => [
-                //     new File([
-                //         "mimeTypes" => [
-                //             'image/webp',
-                //             'image/jpeg',
-                //             'image/png',
-                //             'image/gif'
-                //         ],
-                //         'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif)',
-                //     ]),
-                //     new NotNull(message: "Veuillez sélectionner un fichier.")
-                // ]
             ]);
     }
 
@@ -42,7 +30,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Image::class,
-            "validation_groups" => ["creation", "edition"]
+            // "validation_groups" => ["creation", "edition"]
         ]);
     }
 }

@@ -6,12 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use App\Trait\TimestampableTrait;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\CustomTrait\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Validation;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -225,7 +223,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Get the value of profileImage
      */
-    public function getProfileImage()
+    public function getProfileImage(): ?string
     {
         return $this->profileImage;
     }
@@ -235,7 +233,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return  self
      */
-    public function setProfileImage($profileImage)
+    public function setProfileImage(?string $profileImage)
     {
         $this->profileImage = $profileImage;
 
@@ -245,7 +243,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Get the value of resetToken
      */
-    public function getResetToken()
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
@@ -255,7 +253,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return  self
      */
-    public function setResetToken($resetToken)
+    public function setResetToken(?string $resetToken)
     {
         $this->resetToken = $resetToken;
 

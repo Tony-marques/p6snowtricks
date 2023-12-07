@@ -7,7 +7,6 @@ use DateTimeImmutable;
 use App\Helpers\Uploader;
 use App\Form\EditUserType;
 use App\Form\RegisterType;
-use App\Form\ShowUserType;
 use App\Form\EditUserAdminType;
 use App\Form\ResetPasswordType;
 use App\Form\ForgetPasswordType;
@@ -102,7 +101,7 @@ class UserController extends AbstractController
 
     #[IsGranted("ROLE_ADMIN")]
     #[Route(path: "/utilisateurs/suppression/{id}", name: "app.users_delete")]
-    public function deleteUser(User $user, EntityManagerInterface $em)
+    public function deleteUser(User $user, EntityManagerInterface $em): Response
     {
         $em->remove($user);
         $em->flush();
@@ -180,6 +179,8 @@ class UserController extends AbstractController
     #[Route(path: "/profil/{id}", name: "app.show_profile")]
     public function showProfile(User $user): Response
     {
+        $this->denyAccessUnlessGranted("USER_EDIT", $user);
+
         return $this->render("user/show_profile.html.twig", [
             "user" => $user
         ]);
@@ -188,15 +189,13 @@ class UserController extends AbstractController
     #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
     public function editProfile(Request $request, User $user, EntityManagerInterface $em, Uploader $uploader): Response
     {
-        // Créer le voter, peut modifier uniquement son propre profil
+        $this->denyAccessUnlessGranted("USER_EDIT", $user);
+
         $form = $this->createForm(EditUserType::class, $user, ["validation_groups" => ["user_edit"]]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // \dump($form->isSubmitted() ? "oui" : "non");
-            // \dump($form->isValid() ? "oui" : "non");
-            // \dd("toto");
 
             $imageFile = $form->get("profileImageFile")->getData() ?? null;
             if ($imageFile != null) {

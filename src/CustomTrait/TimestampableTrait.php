@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Trait;
+namespace App\CustomTrait;
 
 use Doctrine\ORM\Mapping as ORM;
 

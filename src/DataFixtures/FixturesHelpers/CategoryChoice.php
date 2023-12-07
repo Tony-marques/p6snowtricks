@@ -2,9 +2,10 @@
 
 namespace App\DataFixtures\FixturesHelpers;
 
+
 class CategoryChoice
 {
-  public function choice($trick, $categories)
+  public function choice(string $trick, array $categories): ?string
   {
     switch ($trick) {
       case "Mute": {

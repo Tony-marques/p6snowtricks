@@ -22,7 +22,6 @@ allDeleteBtn.forEach((btn) => {
                msg.textContent = data.message;
                const parent = e.target.closest(".card");
                parent.remove();
-               console.log(data);
             })
             .catch((err) => {});
       }
