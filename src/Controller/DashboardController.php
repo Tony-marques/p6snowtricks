@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted("ROLE_ADMIN")]
 class DashboardController extends AbstractController
 {
-    #[Route('/dashboard', name: 'app.dashboard')]
+    #[Route('/dashboard', name: 'app.dashboard', methods: ["GET"])]
     public function index(EntityManagerInterface $em): Response
     {
         return $this->render('dashboard/index.html.twig', [

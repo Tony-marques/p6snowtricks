@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app.home')]
+    #[Route('/', name: 'app.home', methods: ["GET"])]
     public function index(TrickRepository $trickRepository, Request $request, Paginator $paginator): Response
     {
         $tricks = $trickRepository->findBy([], ["createdAt" => "ASC"]);

@@ -23,7 +23,7 @@ class CategoryController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/creer', name: 'create')]
+    #[Route('/creer', name: 'create', methods: ["GET", "POST"])]
     public function index(Request $request, SluggerInterface $slugger): Response
     {
         $category = new Category();
@@ -49,7 +49,7 @@ class CategoryController extends AbstractController
     }
 
     
-    #[Route(path: "/", name: "manage")]
+    #[Route(path: "/", name: "manage", methods: ["GET"])]
     public function manageCategory(): Response
     {
         return $this->render("category/manage.html.twig", [
@@ -58,7 +58,7 @@ class CategoryController extends AbstractController
     }
 
     
-    #[Route(path: "/edition/{slug}", name: "edit")]
+    #[Route(path: "/edition/{slug}", name: "edit", methods: ["GET", "POST"])]
     public function editCategory(Category $category, Request $request, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
@@ -85,7 +85,7 @@ class CategoryController extends AbstractController
     }
 
     
-    #[Route(path: "/supprimer/{slug}", name: "delete")]
+    #[Route(path: "/supprimer/{slug}", name: "delete", methods: ["GET"])]
     public function delete(Category $category): Response
     {
         $this->em->remove($category);

@@ -25,7 +25,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    #[Route(path: '/inscription', name: 'app.register')]
+    #[Route(path: '/inscription', name: 'app.register', methods: ["GET", "POST"])]
     public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
     {
         $user = new User();
@@ -50,7 +50,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/connexion', name: 'app.login')]
+    #[Route('/connexion', name: 'app.login', methods: ["GET", "POST"])]
     public function connexion(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -62,13 +62,13 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/deconnexion", name: "app.logout")]
+    #[Route(path: "/deconnexion", name: "app.logout", methods: ["GET"])]
     public function logout(): void
     {
     }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route(path: "/utilisateurs", name: "app.users")]
+    #[Route(path: "/utilisateurs", name: "app.users", methods: ["GET"])]
     public function allUsers(EntityManagerInterface $em): Response
     {
         return $this->render("user/manage.html.twig", [
@@ -77,7 +77,7 @@ class UserController extends AbstractController
     }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route(path: "/utilisateurs/edition/{id}", name: "app.users_update")]
+    #[Route(path: "/utilisateurs/edition/{id}", name: "app.users_update", methods: ["GET", "POST"])]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em): Response
     {
 
@@ -100,7 +100,7 @@ class UserController extends AbstractController
     }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route(path: "/utilisateurs/suppression/{id}", name: "app.users_delete")]
+    #[Route(path: "/utilisateurs/suppression/{id}", name: "app.users_delete", methods: ["GET"])]
     public function deleteUser(User $user, EntityManagerInterface $em): Response
     {
         $em->remove($user);
@@ -111,7 +111,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute("app.users");
     }
 
-    #[Route(path: "/mot-de-passe-oublié", name: "app.forget_password")]
+    #[Route(path: "/mot-de-passe-oublié", name: "app.forget_password", methods: ["GET", "POST"])]
     public function forgetPassword(Request $request, UserRepository $userRepo, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
         if ($this->getUser()) {
@@ -127,20 +127,27 @@ class UserController extends AbstractController
             $token = bin2hex(random_bytes(32));
 
             $user = $userRepo->findOneBy(["email" => $form->get("email")->getData()]);
-            $user->setResetToken($token);
 
-            $em->persist($user);
-            $em->flush();
+            if ($user) {
+                $user->setResetToken($token);
 
-            $resetLink = $this->generateUrl('app.reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+                $em->persist($user);
+                $em->flush();
 
-            $email = (new Email())
-                ->from('noreply@example.com')
-                ->to($user->getEmail())
-                ->subject('Réinitialisation de mot de passe')
-                ->html('Cliquez sur le lien suivant pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">Réinitialiser le mot de passe</a>');
+                $resetLink = $this->generateUrl('app.reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $mailer->send($email);
+                $email = (new Email())
+                    ->from('noreply@example.com')
+                    ->to($user->getEmail())
+                    ->subject('Réinitialisation de mot de passe')
+                    ->html('Cliquez sur le lien suivant pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">Réinitialiser le mot de passe</a>');
+
+                $mailer->send($email);
+
+                $this->addFlash("success", "Un email vous a été envoyé !");
+
+                return $this->redirectToRoute("app.forget_password");
+            }
         }
 
         return $this->render("user/forgetPassword.html.twig", [
@@ -148,7 +155,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/mot-de-passe-oublié/{token}", name: "app.reset_password")]
+    #[Route(path: "/mot-de-passe-oublié/{token}", name: "app.reset_password", methods: ["GET", "POST"])]
     public function resetPassword(string $token, Request $request, UserRepository $userRepo, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $userRepo->findOneBy(["resetToken" => $token]);
@@ -160,10 +167,13 @@ class UserController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 
                 $user->setResetToken("")
-                    ->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()));
+                    ->setPassword($passwordHasher->hashPassword($user, $form->get("password")->getData()))
+                    ->setUpdatedAt(new DateTimeImmutable());
 
                 $em->persist($user);
                 $em->flush();
+
+                $this->addFlash("success", "Mot de passe modifié avec succès !");
 
                 return $this->redirectToRoute("app.login");
             }
@@ -176,7 +186,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute("app.forget_password");
     }
 
-    #[Route(path: "/profil/{id}", name: "app.show_profile")]
+    #[Route(path: "/profil/{id}", name: "app.show_profile", methods: ["GET"])]
     public function showProfile(User $user): Response
     {
         $this->denyAccessUnlessGranted("USER_EDIT", $user);
@@ -186,7 +196,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/profil/edition/{id}", name: "app.edit_profile")]
+    #[Route(path: "/profil/edition/{id}", name: "app.edit_profile" , methods: ["GET", "POST"])]
     public function editProfile(Request $request, User $user, EntityManagerInterface $em, Uploader $uploader): Response
     {
         $this->denyAccessUnlessGranted("USER_EDIT", $user);
