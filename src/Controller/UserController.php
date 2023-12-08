@@ -210,8 +210,7 @@ class UserController extends AbstractController
             $imageFile = $form->get("profileImageFile")->getData() ?? null;
             if ($imageFile !== null) {
 
-                if ($user->getProfileImage() != null) {
-
+                if ($user->getProfileImage() !== null) {
                     $uploader->removeImage("upload/profile/{$user->getProfileImage()}");
                 }
 

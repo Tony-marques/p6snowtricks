@@ -1,0 +1,16 @@
+
+{
+  "lang": "fr-FR",
+
+  "name": "Snowtricks",
+
+  "short_name": "Snowtricks",
+
+  "description": "Snowtricks est une application web colaboratives centrée sur l'entraide et l'apprentissage de figures",
+
+  "start_url": "https://localhost:8000/connexion",
+
+  "orientation": "landscape",
+
+  "display": "fullscreen"
+}
