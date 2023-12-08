@@ -196,7 +196,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: "/profil/edition/{id}", name: "app.edit_profile" , methods: ["GET", "POST"])]
+    #[Route(path: "/profil/edition/{id}", name: "app.edit_profile", methods: ["GET", "POST"])]
     public function editProfile(Request $request, User $user, EntityManagerInterface $em, Uploader $uploader): Response
     {
         $this->denyAccessUnlessGranted("USER_EDIT", $user);
@@ -208,6 +208,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageFile = $form->get("profileImageFile")->getData() ?? null;
+
             if ($imageFile !== null) {
 
                 if ($user->getProfileImage() !== null) {

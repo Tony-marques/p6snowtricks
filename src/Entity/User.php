@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use App\CustomTrait\TimestampableTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -69,7 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
-    // private ?UploadedFile $profileImageFile = null;
+    private ?UploadedFile $profileImageFile = null;
 
     #[Assert\LessThan(
         100,
@@ -265,22 +266,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Get the value of profileImageFile
      */
-    // public function getProfileImageFile()
-    // {
-    //     return $this->profileImageFile;
-    // }
+    public function getProfileImageFile()
+    {
+        return $this->profileImageFile;
+    }
 
-    // /**
-    //  * Set the value of profileImageFile
-    //  *
-    //  * @return  self
-    //  */ 
-    // public function setProfileImageFile($profileImageFile)
-    // {
-    //     $this->profileImageFile = $profileImageFile;
+    /**
+     * Set the value of profileImageFile
+     *
+     * @return  self
+     */ 
+    public function setProfileImageFile($profileImageFile)
+    {
+        $this->profileImageFile = $profileImageFile;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * @return Collection<int, Trick>
