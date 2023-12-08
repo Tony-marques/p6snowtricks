@@ -38,6 +38,7 @@ class EditUserType extends AbstractType
               'image/gif'
             ],
             'mimeTypesMessage' => 'Le type du fichier n\'est pas supporté (webp, jpeg, png, gif).',
+            "groups" => ["user_edit"]
           ])
         ]
       ]);
