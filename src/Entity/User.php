@@ -266,7 +266,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Get the value of profileImageFile
      */
-    public function getProfileImageFile()
+    public function getProfileImageFile(): ?UploadedFile
     {
         return $this->profileImageFile;
     }
@@ -276,7 +276,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return  self
      */ 
-    public function setProfileImageFile($profileImageFile)
+    public function setProfileImageFile(?UploadedFile $profileImageFile)
     {
         $this->profileImageFile = $profileImageFile;
 
