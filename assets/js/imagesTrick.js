@@ -1,8 +1,6 @@
 const buttons = document.querySelectorAll(".add_item_link");
-console.log(buttons);
 buttons.forEach((btn) => {
    btn.addEventListener("click", (e) => {
-      console.log("click");
       const collectionHolder = document.querySelector(
          "." + e.currentTarget.dataset.collectionHolderClass
       );
